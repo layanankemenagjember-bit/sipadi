@@ -3,13 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SIPADI — Tools Bantu Administrasi Manajemen Arsip Handal · Kemenag Kab. Jember</title>
+<title>SIPADI — Sistem Aplikasi Pemberkasan Arsip Digital · Kemenag Kab. Jember</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=DM+Mono:wght@300;400;500&family=Instrument+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
-<!-- Tesseract.js: OCR gratis, browser-only, tanpa API key, tanpa CC -->
-<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <!-- PDF.js: render halaman PDF ke canvas untuk OCR -->
 <script>
   (function(){
@@ -1580,7 +1578,7 @@ html.light a { color: #2D7A4F !important; }
         <div class="lp-brand-title">SIPADI</div>
         <div class="lp-brand-sub">Administrasi Manajemen Arsip Handal</div>
         <div class="lp-quote">
-          <p>"Sipadi dalam data, tertib dalam administrasi, dan terpercaya dalam pelayanan digital modern."</p>
+          <p>"Sistem Aplikasi Pemberkasan Arsip Digital Kementerian Agama Kabupaten Jember."</p>
         </div>
         <div class="lp-pills">
           <div class="lp-pill"><div class="lp-pill-ico">🛡</div>Aman</div>
@@ -1598,7 +1596,7 @@ html.light a { color: #2D7A4F !important; }
     <div class="lp-right">
       <div class="lp-welcome">Selamat Datang di</div>
       <div class="lp-brand-name">SIPADI</div>
-      <div class="lp-tagline">Masuk untuk melanjutkan ke sistem administrasi</div>
+      <div class="lp-tagline">Sistem Aplikasi Pemberkasan Arsip Digital</div>
 
       <!-- Username — id="em" dipertahankan sesuai doLogin() -->
       <div class="fi-wrap">
@@ -1884,7 +1882,7 @@ html.light a { color: #2D7A4F !important; }
       <!-- VERIFIKASI -->
       <div class="page" id="pVf">
         <div class="verify-box">
-          <p>Masukkan hash SHA-256 atau nomor akta/ijazah<br>untuk memverifikasi keaslian dokumen dalam sistem SIPADI</p>
+          <p>Masukkan hash SHA-256 atau nomor akta/ijazah<br>untuk memverifikasi keaslian dokumen dalam Sistem Aplikasi Pemberkasan Arsip Digital (SIPADI)</p>
           <div class="verify-input-row">
             <input class="fc" id="vIn" style="flex:1" placeholder="sha256:... atau nomor akta / nomor ijazah">
             <button class="btn btn-jade" onclick="verD()">🔍 Verifikasi Sekarang</button>
@@ -2662,45 +2660,84 @@ const ALLM=[...MI,...MTS,...MAN];
 // ✅ Tidak ada batas request per hari/bulan
 // ══════════════════════════════════════════════════════
 
-// Core OCR Engine menggunakan Tesseract.js
+// Core OCR Engine menggunakan Gemini Vision AI
+const GEMINI_KEY = 'AQ.Ab8RN6I8BbFCeedHzb6-dU6IyNAHVQyakptWQyrTdAWsa1fGbA';
+const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' + GEMINI_KEY;
+
+async function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result.split(',')[1]);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+async function pdfPageToBase64(file, pageNum) {
+  if (!window.pdfjsLib) throw new Error('PDF.js belum siap.');
+  const arrayBuf = await file.arrayBuffer();
+  const pdf = await window.pdfjsLib.getDocument({ data: arrayBuf }).promise;
+  const page = await pdf.getPage(pageNum);
+  const viewport = page.getViewport({ scale: 2.5 });
+  const canvas = document.createElement('canvas');
+  canvas.width = viewport.width;
+  canvas.height = viewport.height;
+  await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
+  return canvas.toDataURL('image/jpeg', 0.92).split(',')[1];
+}
+
+async function geminiOcr(base64, mimeType, prompt) {
+  const body = {
+    contents: [{
+      parts: [
+        { inline_data: { mime_type: mimeType, data: base64 } },
+        { text: prompt }
+      ]
+    }]
+  };
+  const res = await fetch(GEMINI_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  if (!res.ok) throw new Error('Gemini API error: ' + res.status);
+  const data = await res.json();
+  return data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+}
+
 async function doOcrWithTesseract(file, onProgress) {
   const isImage = file.type.startsWith('image/');
   const isPdf   = file.type === 'application/pdf';
-
   if (!isImage && !isPdf) throw new Error('Format tidak didukung. Gunakan JPG, PNG, atau PDF.');
+
+  const prompt = `Ekstrak SEMUA teks yang ada dalam dokumen ini secara lengkap dan akurat. 
+Pertahankan format asli, termasuk baris baru, spasi, dan tanda baca.
+Jangan tambahkan interpretasi atau penjelasan — hanya teks mentah dari dokumen.
+Jika ada tabel, ekstrak baris per baris dengan pemisah yang jelas.`;
+
+  if (onProgress) onProgress(10);
 
   let rawText = '';
 
   if (isImage) {
-    // ── OCR langsung pada gambar ──
-    const worker = await Tesseract.createWorker('ind+eng', 1, {
-      logger: m => { if (onProgress && m.status === 'recognizing text') onProgress(Math.round(m.progress*100)); }
-    });
-    const { data: { text } } = await worker.recognize(file);
-    await worker.terminate();
-    rawText = text;
+    const base64 = await fileToBase64(file);
+    if (onProgress) onProgress(40);
+    rawText = await geminiOcr(base64, file.type, prompt);
+    if (onProgress) onProgress(100);
 
   } else if (isPdf) {
-    // ── Render setiap halaman PDF ke canvas, lalu OCR ──
     if (!window.pdfjsLib) throw new Error('PDF.js belum siap. Coba lagi sesaat.');
     const arrayBuf = await file.arrayBuffer();
-    const pdf      = await window.pdfjsLib.getDocument({ data: arrayBuf }).promise;
-    const maxPages = Math.min(pdf.numPages, 4); // Maks 4 halaman
+    const pdf = await window.pdfjsLib.getDocument({ data: arrayBuf }).promise;
+    const maxPages = Math.min(pdf.numPages, 4);
 
     for (let p = 1; p <= maxPages; p++) {
-      if (onProgress) onProgress(Math.round((p-1)/maxPages*80));
-      const page     = await pdf.getPage(p);
-      const viewport = page.getViewport({ scale: 2.5 }); // Skala tinggi = akurasi lebih baik
-      const canvas   = document.createElement('canvas');
-      canvas.width   = viewport.width;
-      canvas.height  = viewport.height;
-      await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
-
-      const worker = await Tesseract.createWorker('ind+eng', 1, { logger: ()=>{} });
-      const { data: { text } } = await worker.recognize(canvas);
-      await worker.terminate();
+      if (onProgress) onProgress(Math.round(10 + (p-1)/maxPages * 80));
+      const base64 = await pdfPageToBase64(file, p);
+      const text = await geminiOcr(base64, 'image/jpeg', prompt);
       rawText += text + '\n';
     }
+    if (onProgress) onProgress(100);
   }
 
   return rawText.trim();
@@ -2838,49 +2875,6 @@ const sb = null;
 // ✅ Tidak ada batas request per hari/bulan
 // ══════════════════════════════════════════════════════
 
-// Core OCR Engine menggunakan Tesseract.js
-async function doOcrWithTesseract(file, onProgress) {
-  const isImage = file.type.startsWith('image/');
-  const isPdf   = file.type === 'application/pdf';
-
-  if (!isImage && !isPdf) throw new Error('Format tidak didukung. Gunakan JPG, PNG, atau PDF.');
-
-  let rawText = '';
-
-  if (isImage) {
-    // ── OCR langsung pada gambar ──
-    const worker = await Tesseract.createWorker('ind+eng', 1, {
-      logger: m => { if (onProgress && m.status === 'recognizing text') onProgress(Math.round(m.progress*100)); }
-    });
-    const { data: { text } } = await worker.recognize(file);
-    await worker.terminate();
-    rawText = text;
-
-  } else if (isPdf) {
-    // ── Render setiap halaman PDF ke canvas, lalu OCR ──
-    if (!window.pdfjsLib) throw new Error('PDF.js belum siap. Coba lagi sesaat.');
-    const arrayBuf = await file.arrayBuffer();
-    const pdf      = await window.pdfjsLib.getDocument({ data: arrayBuf }).promise;
-    const maxPages = Math.min(pdf.numPages, 4); // Maks 4 halaman
-
-    for (let p = 1; p <= maxPages; p++) {
-      if (onProgress) onProgress(Math.round((p-1)/maxPages*80));
-      const page     = await pdf.getPage(p);
-      const viewport = page.getViewport({ scale: 2.5 }); // Skala tinggi = akurasi lebih baik
-      const canvas   = document.createElement('canvas');
-      canvas.width   = viewport.width;
-      canvas.height  = viewport.height;
-      await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
-
-      const worker = await Tesseract.createWorker('ind+eng', 1, { logger: ()=>{} });
-      const { data: { text } } = await worker.recognize(canvas);
-      await worker.terminate();
-      rawText += text + '\n';
-    }
-  }
-
-  return rawText.trim();
-}
 
 // ══════════════════════════════════════════════════════
 // PARSER TEKS OCR → DATA TERSTRUKTUR
@@ -4052,7 +4046,7 @@ async function verD(){
 
   const doc=dn||di; const isN=!!dn;
   if(doc){
-    r.innerHTML=`<div class="alert alert-ok" style="margin-bottom:14px">✅ Dokumen VALID — terautentikasi dalam sistem SIPADI Kemenag Kab. Jember</div>
+    r.innerHTML=`<div class="alert alert-ok" style="margin-bottom:14px">✅ Dokumen VALID — terautentikasi dalam SIPADI — Sistem Aplikasi Pemberkasan Arsip Digital Kemenag Kab. Jember</div>
     <div class="card" style="animation:none"><div class="card-body">
       <div style="display:flex;gap:10px;margin-bottom:8px">
         <span class="badge badge-jade">${isN?'Register Nikah':'Ijazah Madrasah'}</span>
@@ -4068,7 +4062,7 @@ async function verD(){
       <div style="margin-top:12px;padding:10px;background:rgba(0,0,0,.3);border-radius:8px;font-family:'DM Mono',monospace;font-size:10px;color:var(--cream4)">🔒 ${doc.hash}</div>
     </div></div>`;
   } else {
-    r.innerHTML=`<div class="alert alert-err">❌ Dokumen <strong>tidak ditemukan</strong> atau hash tidak valid dalam sistem SIPADI</div>`;
+    r.innerHTML=`<div class="alert alert-err">❌ Dokumen <strong>tidak ditemukan</strong> atau hash tidak valid dalam Sistem Aplikasi Pemberkasan Arsip Digital (SIPADI)</div>`;
   }
 }
 
@@ -4081,11 +4075,11 @@ async function procFR(file,t,rid){
   if(!allowed.includes(file.type)){el.innerHTML=`<div class="alert alert-err">❌ Format tidak didukung (PDF/JPG/PNG).</div>`;return;}
   if(file.size>20*1024*1024){el.innerHTML=`<div class="alert alert-err">❌ File terlalu besar (maks 20 MB).</div>`;return;}
 
-  el.innerHTML=`<div class="alert alert-info" style="display:flex;align-items:center;gap:10px"><span style="animation:spin 1s linear infinite;display:inline-block;font-size:18px">⟳</span><span>Memproses <strong>${file.name}</strong> dengan Tesseract.js OCR…</span></div>`;
+  el.innerHTML=`<div class="alert alert-info" style="display:flex;align-items:center;gap:10px"><span style="animation:spin 1s linear infinite;display:inline-block;font-size:18px">⟳</span><span>Memproses <strong>${file.name}</strong> dengan Gemini AI OCR…</span></div>`;
 
   try{
     const rawText = await doOcrWithTesseract(file, pct => {
-      el.innerHTML=`<div class="alert alert-info" style="display:flex;align-items:center;gap:10px"><span style="animation:spin 1s linear infinite;display:inline-block;font-size:18px">⟳</span><span>OCR berjalan… <strong>${pct}%</strong></span></div>`;
+      el.innerHTML=`<div class="alert alert-info" style="display:flex;align-items:center;gap:10px"><span style="animation:spin 1s linear infinite;display:inline-block;font-size:18px">⟳</span><span>Gemini AI memproses… <strong>${pct}%</strong></span></div>`;
     });
     if(!rawText||rawText.trim().length<10) throw new Error('Teks tidak terdeteksi. Pastikan scan jelas.');
 
@@ -4313,7 +4307,7 @@ async function processIjazahOcr(file) {
   if (!allowed.includes(file.type)) { showIjazahStatus('error','❌ Format tidak didukung (JPG/PNG/PDF).'); return; }
   if (file.size > 20*1024*1024) { showIjazahStatus('error','❌ File terlalu besar (maks 20 MB).'); return; }
 
-  showIjazahStatus('loading','🔄 Membaca ijazah dengan Tesseract.js… mohon tunggu.');
+  showIjazahStatus('loading','🔄 Membaca ijazah dengan Gemini AI… mohon tunggu.');
   document.getElementById('iOcrPreview').style.display = 'none';
 
   try {
@@ -4465,7 +4459,7 @@ async function processOcrFile(file) {
   if (!allowed.includes(file.type)) { showOcrStatus('error','❌ Format tidak didukung. Gunakan JPG, PNG, atau PDF.'); return; }
   if (file.size > 20*1024*1024) { showOcrStatus('error','❌ File terlalu besar (maks 20 MB).'); return; }
 
-  showOcrStatus('loading','🔄 Membaca dokumen dengan Tesseract.js... mohon tunggu.');
+  showOcrStatus('loading','🔄 Membaca dokumen dengan Gemini AI... mohon tunggu.');
   document.getElementById('ocrPreview').style.display = 'none';
 
   try {
