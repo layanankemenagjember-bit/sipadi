@@ -3,12 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AMANAH — Tools Bantu Administrasi Manajemen Arsip Handal · Kemenag Kab. Jember</title>
+<title>SIPADI — Tools Bantu Administrasi Manajemen Arsip Handal · Kemenag Kab. Jember</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=DM+Mono:wght@300;400;500&family=Instrument+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <!-- Tesseract.js: OCR gratis, browser-only, tanpa API key, tanpa CC -->
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <!-- PDF.js: render halaman PDF ke canvas untuk OCR -->
@@ -1466,7 +1465,7 @@ html.light .login-subtitle, html.light .lp-app-tag {
 }
 html.light .ldiv-text { color: #A8C4B4 !important; }
 
-/* ── Light mode: AMANAH logo & title fixes for white background ── */
+/* ── Light mode: SIPADI logo & title fixes for white background ── */
 html.light .logo-title {
   background: linear-gradient(135deg, #B8860B 0%, #D4A017 30%, #C9A84C 60%, #A0720A 100%) !important;
   -webkit-background-clip: text !important;
@@ -1578,10 +1577,10 @@ html.light a { color: #2D7A4F !important; }
         </div>
         <div class="lp-kemenag">Kementerian Agama Republik Indonesia</div>
         <div class="lp-lokasi">Kabupaten Jember — Jawa Timur</div>
-        <div class="lp-brand-title">AMANAH</div>
+        <div class="lp-brand-title">SIPADI</div>
         <div class="lp-brand-sub">Administrasi Manajemen Arsip Handal</div>
         <div class="lp-quote">
-          <p>"Amanah dalam data, tertib dalam administrasi, dan terpercaya dalam pelayanan digital modern."</p>
+          <p>"Sipadi dalam data, tertib dalam administrasi, dan terpercaya dalam pelayanan digital modern."</p>
         </div>
         <div class="lp-pills">
           <div class="lp-pill"><div class="lp-pill-ico">🛡</div>Aman</div>
@@ -1598,7 +1597,7 @@ html.light a { color: #2D7A4F !important; }
     <!-- ══ PANEL KANAN (Form) ══ -->
     <div class="lp-right">
       <div class="lp-welcome">Selamat Datang di</div>
-      <div class="lp-brand-name">AMANAH</div>
+      <div class="lp-brand-name">SIPADI</div>
       <div class="lp-tagline">Masuk untuk melanjutkan ke sistem administrasi</div>
 
       <!-- Username — id="em" dipertahankan sesuai doLogin() -->
@@ -1651,7 +1650,7 @@ html.light a { color: #2D7A4F !important; }
     <div class="sb-inner">
       <div class="sb-header">
         <div class="sb-logo-row">
-          <div class="sb-emblem" aria-label="AMANAH">
+          <div class="sb-emblem" aria-label="SIPADI">
   <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg" width="42" height="42">
     <defs><linearGradient id="lgs" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#f5c842"/><stop offset="100%" stop-color="#c8922a"/></linearGradient></defs>
     <circle cx="25" cy="25" r="23" fill="rgba(15,92,58,0.4)" stroke="url(#lgs)" stroke-width="1.2"/>
@@ -1659,7 +1658,7 @@ html.light a { color: #2D7A4F !important; }
   </svg>
 </div>
           <div class="sb-titles">
-            <h2>AMANAH</h2>
+            <h2>SIPADI</h2>
             <span>Kemenag Kab. Jember</span>
           </div>
         </div>
@@ -1688,7 +1687,7 @@ html.light a { color: #2D7A4F !important; }
       <div class="nav-item" id="nLap" onclick="nav('lp',this)"><div class="nav-ico">📈</div>Laporan & Statistik</div>
       <div class="sb-footer">
         <div class="logout-btn" onclick="doLogout()">🚪 Keluar dari Sistem</div>
-        <div class="sb-version">AMANAH v2.0 · 2025</div>
+        <div class="sb-version">SIPADI v2.0 · 2025</div>
       </div>
     </div>
   </nav>
@@ -1698,7 +1697,7 @@ html.light a { color: #2D7A4F !important; }
     <div class="topbar">
       <div class="topbar-breadcrumb">
         <div class="topbar-title" id="pgT">Dashboard</div>
-        <div class="topbar-path">AMANAH › <span id="pgB">Dashboard</span></div>
+        <div class="topbar-path">SIPADI › <span id="pgB">Dashboard</span></div>
       </div>
       <div class="topbar-right">
         <span class="topbar-chip" id="topChip">Kemenag Kab. Jember</span>
@@ -1885,7 +1884,7 @@ html.light a { color: #2D7A4F !important; }
       <!-- VERIFIKASI -->
       <div class="page" id="pVf">
         <div class="verify-box">
-          <p>Masukkan hash SHA-256 atau nomor akta/ijazah<br>untuk memverifikasi keaslian dokumen dalam sistem AMANAH</p>
+          <p>Masukkan hash SHA-256 atau nomor akta/ijazah<br>untuk memverifikasi keaslian dokumen dalam sistem SIPADI</p>
           <div class="verify-input-row">
             <input class="fc" id="vIn" style="flex:1" placeholder="sha256:... atau nomor akta / nomor ijazah">
             <button class="btn btn-jade" onclick="verD()">🔍 Verifikasi Sekarang</button>
@@ -1934,7 +1933,7 @@ html.light a { color: #2D7A4F !important; }
           <div class="guide-section">
             <h3><span class="step-badge">1</span> Buat Project Firebase</h3>
             <div class="step-item"><span class="step-badge" style="width:20px;height:20px;font-size:9px">a</span>Buka <span class="inline-code">console.firebase.google.com</span> → klik <strong style="color:var(--cream)">"Add project"</strong></div>
-            <div class="step-item"><span class="step-badge" style="width:20px;height:20px;font-size:9px">b</span>Nama project: <span class="inline-code">amanah-kemenag-jember</span> → lanjutkan</div>
+            <div class="step-item"><span class="step-badge" style="width:20px;height:20px;font-size:9px">b</span>Nama project: <span class="inline-code">sipadi-kemenag-jember</span> → lanjutkan</div>
             <div class="step-item"><span class="step-badge" style="width:20px;height:20px;font-size:9px">c</span>Di dashboard → klik ikon <strong style="color:var(--cream)">Web (&lt;/&gt;)</strong> → Register app → salin <span class="inline-code">firebaseConfig</span></div>
           </div>
           <div class="guide-section">
@@ -1956,9 +1955,9 @@ import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey:            "AIzaSy...",           // dari Firebase Console
-  authDomain:        "amanah-kemenag-jember.firebaseapp.com",
-  projectId:         "amanah-kemenag-jember",
-  storageBucket:     "amanah-kemenag-jember.appspot.com",
+  authDomain:        "sipadi-kemenag-jember.firebaseapp.com",
+  projectId:         "sipadi-kemenag-jember",
+  storageBucket:     "sipadi-kemenag-jember.appspot.com",
   messagingSenderId: "123456789",
   appId:             "1:123456789:web:abc123"
 };
@@ -2050,12 +2049,12 @@ netlify login
 # Browser akan terbuka → otorisasi CLI
 
 # 3. Masuk ke folder project
-cd /path/to/amanah-project
+cd /path/to/sipadi-project
 
 # 4. Inisialisasi project Netlify
 netlify init
 # Pilih: "Create & configure a new site"
-# Nama site: amanah-kemenag-jember (atau kosongkan untuk auto)
+# Nama site: sipadi-kemenag-jember (atau kosongkan untuk auto)
 
 # 5. Deploy ke production
 netlify deploy --prod --dir=.
@@ -2063,7 +2062,7 @@ netlify deploy --prod --dir=.
 # --dir=dist  jika menggunakan build (React/Vite)
 
 # ✅ URL production akan muncul:
-# https://amanah-kemenag-jember.netlify.app</pre>
+# https://sipadi-kemenag-jember.netlify.app</pre>
           </div>
 
           <div class="netlify-card">
@@ -2071,10 +2070,10 @@ netlify deploy --prod --dir=.
             <div class="netlify-step"><div class="netlify-step-num">1</div><div class="netlify-step-content"><h5>Push project ke GitHub</h5>
 <pre class="code-block" style="margin:8px 0" data-lang="GIT">git init
 git add .
-git commit -m "feat: AMANAH initial commit"
-git remote add origin https://github.com/username/amanah-kemenag
+git commit -m "feat: SIPADI initial commit"
+git remote add origin https://github.com/username/sipadi-kemenag
 git push -u origin main</pre></div></div>
-            <div class="netlify-step"><div class="netlify-step-num">2</div><div class="netlify-step-content"><h5>Import dari GitHub ke Netlify</h5><p>Netlify Dashboard → <strong>Add new site → Import an existing project → GitHub</strong> → pilih repo amanah</p></div></div>
+            <div class="netlify-step"><div class="netlify-step-num">2</div><div class="netlify-step-content"><h5>Import dari GitHub ke Netlify</h5><p>Netlify Dashboard → <strong>Add new site → Import an existing project → GitHub</strong> → pilih repo sipadi</p></div></div>
             <div class="netlify-step"><div class="netlify-step-num">3</div><div class="netlify-step-content"><h5>Konfigurasi build settings</h5>
 <pre class="code-block" style="margin:8px 0" data-lang="CONFIG">Base directory:    (kosong, untuk HTML murni)
 Build command:     (kosong)
@@ -2094,9 +2093,9 @@ Publish directory: dist</pre></div></div>
               <thead><tr><th>Variable Name</th><th>Value (contoh)</th><th>Keterangan</th></tr></thead>
               <tbody>
                 <tr><td>VITE_FIREBASE_API_KEY</td><td>AIzaSy...</td><td>API Key dari Firebase</td></tr>
-                <tr><td>VITE_FIREBASE_AUTH_DOMAIN</td><td>amanah.firebaseapp.com</td><td>Auth domain</td></tr>
-                <tr><td>VITE_FIREBASE_PROJECT_ID</td><td>amanah-kemenag-jember</td><td>Project ID</td></tr>
-                <tr><td>VITE_FIREBASE_STORAGE_BUCKET</td><td>amanah.appspot.com</td><td>Storage bucket</td></tr>
+                <tr><td>VITE_FIREBASE_AUTH_DOMAIN</td><td>sipadi.firebaseapp.com</td><td>Auth domain</td></tr>
+                <tr><td>VITE_FIREBASE_PROJECT_ID</td><td>sipadi-kemenag-jember</td><td>Project ID</td></tr>
+                <tr><td>VITE_FIREBASE_STORAGE_BUCKET</td><td>sipadi.appspot.com</td><td>Storage bucket</td></tr>
                 <tr><td>VITE_FIREBASE_MESSAGING_SENDER_ID</td><td>123456789</td><td>Messaging sender</td></tr>
                 <tr><td>VITE_FIREBASE_APP_ID</td><td>1:123...:web:abc</td><td>App ID</td></tr>
               </tbody>
@@ -2133,8 +2132,8 @@ Publish directory: dist</pre></div></div>
 
           <div class="guide-section">
             <h3><span class="step-badge netlify">🔐</span> Domain Kustom (Opsional)</h3>
-            <div class="netlify-step"><div class="netlify-step-num">1</div><div class="netlify-step-content"><h5>Netlify → Site Settings → Domain Management</h5><p>Klik <strong>"Add custom domain"</strong> → masukkan domain, misal: <span class="inline-code">amanah.kemenag-jember.go.id</span></p></div></div>
-            <div class="netlify-step"><div class="netlify-step-num">2</div><div class="netlify-step-content"><h5>Update DNS Record</h5><p>Di panel domain Anda, tambahkan CNAME record: <span class="inline-code">amanah → [nama-site].netlify.app</span></p></div></div>
+            <div class="netlify-step"><div class="netlify-step-num">1</div><div class="netlify-step-content"><h5>Netlify → Site Settings → Domain Management</h5><p>Klik <strong>"Add custom domain"</strong> → masukkan domain, misal: <span class="inline-code">sipadi.kemenag-jember.go.id</span></p></div></div>
+            <div class="netlify-step"><div class="netlify-step-num">2</div><div class="netlify-step-content"><h5>Update DNS Record</h5><p>Di panel domain Anda, tambahkan CNAME record: <span class="inline-code">sipadi → [nama-site].netlify.app</span></p></div></div>
             <div class="netlify-step"><div class="netlify-step-num">3</div><div class="netlify-step-content"><h5>SSL Otomatis</h5><p>Netlify akan otomatis menerbitkan sertifikat SSL gratis via Let's Encrypt dalam 2–5 menit</p></div></div>
           </div>
 
@@ -2479,7 +2478,7 @@ Publish directory: dist</pre></div></div>
         <div class="fg"><label>Konfirmasi Password *</label><input class="fc" type="password" id="oPw2" placeholder="Ulangi password"></div>
       </div>
       <div style="margin-top:6px;padding:8px 12px;background:rgba(45,122,79,.06);border-radius:8px;font-size:11px;color:#2A5040;line-height:1.6">
-        🔐 Password ini digunakan operator untuk login ke AMANAH. Simpan dan bagikan dengan aman ke operator bersangkutan.
+        🔐 Password ini digunakan operator untuk login ke SIPADI. Simpan dan bagikan dengan aman ke operator bersangkutan.
       </div>
     </div>
   </div>
@@ -2635,7 +2634,7 @@ Publish directory: dist</pre></div></div>
 </div></div>
 
 <div class="modal-overlay" id="helpM"><div class="modal">
-  <div class="modal-head"><h3>❓ PANDUAN SINGKAT AMANAH</h3><button class="modal-close" onclick="closeM('helpM')">✕</button></div>
+  <div class="modal-head"><h3>❓ PANDUAN SINGKAT SIPADI</h3><button class="modal-close" onclick="closeM('helpM')">✕</button></div>
   <div class="modal-body" style="line-height:1.8;color:var(--cream3)">
     <p style="margin-bottom:12px"><strong style="color:var(--ember3)">📊 Dashboard</strong> — Ringkasan statistik seluruh data nikah, ijazah, satuan kerja, dan operator aktif.</p>
     <p style="margin-bottom:12px"><strong style="color:var(--ember3)">📋 Register Nikah</strong> — Input, edit, hapus, dan preview dokumen akta nikah. Hash SHA-256 otomatis + QR Code untuk verifikasi.</p>
@@ -2779,6 +2778,182 @@ function parseIjazahText(raw) {
   };
 }
 
+// KONFIGURASI CLOUDFLARE WORKER
+const WORKER_URL = 'https://sipadi-worker.kemenagjember.workers.dev';
+const R2_URL     = 'https://pub-cb38c139fc6248b0a2cd34173379ba58.r2.dev';
+
+// NIK encryption (tetap dipakai untuk privasi data)
+const NIK_SECRET = 'GANTI_DENGAN_32_BYTE_SECRET_ANDA';
+async function getNikKey(){
+  const raw = new TextEncoder().encode(NIK_SECRET.padEnd(32,'0').substring(0,32));
+  return crypto.subtle.importKey('raw', raw, {name:'AES-GCM'}, false, ['encrypt','decrypt']);
+}
+async function encryptNIK(nik){
+  if(!nik || nik.trim()==='') return null;
+  if(NIK_SECRET==='GANTI_DENGAN_32_BYTE_SECRET_ANDA') return nik;
+  try{
+    const key = await getNikKey();
+    const iv  = crypto.getRandomValues(new Uint8Array(12));
+    const enc = await crypto.subtle.encrypt({name:'AES-GCM',iv}, key, new TextEncoder().encode(nik));
+    const combined = new Uint8Array(iv.byteLength + enc.byteLength);
+    combined.set(iv, 0); combined.set(new Uint8Array(enc), iv.byteLength);
+    return 'ENC:' + btoa(String.fromCharCode(...combined));
+  }catch(e){ return nik; }
+}
+async function decryptNIK(val){
+  if(!val || !val.startsWith('ENC:')) return val||'';
+  if(NIK_SECRET==='GANTI_DENGAN_32_BYTE_SECRET_ANDA') return val;
+  try{
+    const key  = await getNikKey();
+    const data = Uint8Array.from(atob(val.slice(4)), c=>c.charCodeAt(0));
+    const iv   = data.slice(0,12);
+    const enc  = data.slice(12);
+    const dec  = await crypto.subtle.decrypt({name:'AES-GCM',iv}, key, enc);
+    return new TextDecoder().decode(dec);
+  }catch(e){ return '[terenkripsi]'; }
+}
+
+// Helper API — semua request ke Worker
+let _token = localStorage.getItem('sipadi_token') || null;
+async function api(method, path, body=null, isUpload=false){
+  const opts = { method, headers: { 'Authorization': _token ? `Bearer ${_token}` : '' } };
+  if(body && !isUpload){ opts.headers['Content-Type']='application/json'; opts.body=JSON.stringify(body); }
+  else if(body && isUpload){ opts.headers['Content-Type']=body.type||'application/octet-stream'; opts.body=body; }
+  const res  = await fetch(WORKER_URL + path, opts);
+  const data = await res.json().catch(()=>({}));
+  if(!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+  return data;
+}
+
+// sb = null (tidak pakai Supabase)
+const sb = null;
+
+// ═══════════ STATE ═══════════
+// ══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════
+// MESIN OCR: TESSERACT.JS
+// ✅ 100% GRATIS SELAMANYA — tanpa API key, tanpa CC, tanpa registrasi
+// ✅ Berjalan di browser — data dokumen TIDAK keluar dari perangkat
+// ✅ Mendukung bahasa Indonesia (Latin) + 100+ bahasa lainnya
+// ✅ Tidak ada batas request per hari/bulan
+// ══════════════════════════════════════════════════════
+
+// Core OCR Engine menggunakan Tesseract.js
+async function doOcrWithTesseract(file, onProgress) {
+  const isImage = file.type.startsWith('image/');
+  const isPdf   = file.type === 'application/pdf';
+
+  if (!isImage && !isPdf) throw new Error('Format tidak didukung. Gunakan JPG, PNG, atau PDF.');
+
+  let rawText = '';
+
+  if (isImage) {
+    // ── OCR langsung pada gambar ──
+    const worker = await Tesseract.createWorker('ind+eng', 1, {
+      logger: m => { if (onProgress && m.status === 'recognizing text') onProgress(Math.round(m.progress*100)); }
+    });
+    const { data: { text } } = await worker.recognize(file);
+    await worker.terminate();
+    rawText = text;
+
+  } else if (isPdf) {
+    // ── Render setiap halaman PDF ke canvas, lalu OCR ──
+    if (!window.pdfjsLib) throw new Error('PDF.js belum siap. Coba lagi sesaat.');
+    const arrayBuf = await file.arrayBuffer();
+    const pdf      = await window.pdfjsLib.getDocument({ data: arrayBuf }).promise;
+    const maxPages = Math.min(pdf.numPages, 4); // Maks 4 halaman
+
+    for (let p = 1; p <= maxPages; p++) {
+      if (onProgress) onProgress(Math.round((p-1)/maxPages*80));
+      const page     = await pdf.getPage(p);
+      const viewport = page.getViewport({ scale: 2.5 }); // Skala tinggi = akurasi lebih baik
+      const canvas   = document.createElement('canvas');
+      canvas.width   = viewport.width;
+      canvas.height  = viewport.height;
+      await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
+
+      const worker = await Tesseract.createWorker('ind+eng', 1, { logger: ()=>{} });
+      const { data: { text } } = await worker.recognize(canvas);
+      await worker.terminate();
+      rawText += text + '\n';
+    }
+  }
+
+  return rawText.trim();
+}
+
+// ══════════════════════════════════════════════════════
+// PARSER TEKS OCR → DATA TERSTRUKTUR
+// Mengekstrak field dari teks mentah hasil OCR
+// ══════════════════════════════════════════════════════
+
+function parseNikahText(raw) {
+  const t = raw.replace(/\r\n/g,'\n');
+  const g = (patterns) => {
+    for (const p of patterns) {
+      const m = t.match(p);
+      if (m && m[1] && m[1].trim().length > 1) return m[1].trim();
+    }
+    return '';
+  };
+  // Tangkap tanggal dalam format DD-MM-YYYY atau DD/MM/YYYY atau teks bulan Indonesia
+  const tglMatch = t.match(/(\d{1,2}[\s\-\/](Januari|Februari|Maret|April|Mei|Juni|Juli|Agustus|September|Oktober|November|Desember|\d{1,2})[\s\-\/]\d{4})/i)
+    || t.match(/tanggal[^:]*:\s*([^\n]+)/i);
+  const bulanMap = {januari:'01',februari:'02',maret:'03',april:'04',mei:'05',juni:'06',
+    juli:'07',agustus:'08',september:'09',oktober:'10',november:'11',desember:'12'};
+  let tgl = tglMatch ? tglMatch[1].trim() : '';
+  // Konversi ke YYYY-MM-DD jika bisa
+  const tglParse = tgl.match(/(\d{1,2})\s+(Januari|Februari|Maret|April|Mei|Juni|Juli|Agustus|September|Oktober|November|Desember)\s+(\d{4})/i);
+  if (tglParse) tgl = `${tglParse[3]}-${bulanMap[tglParse[2].toLowerCase()]}-${tglParse[1].padStart(2,'0')}`;
+
+  return {
+    noAkta:        g([/nomor akta[^:]*:\s*([^\n]+)/i, /no\.?\s*akta[^:]*:\s*([^\n]+)/i, /akta nikah[^:]*:\s*([^\n]+)/i, /(\d{4}[\.\-\/]\d{2,4}[\.\-\/]\d{2,6})/]),
+    noPmrk:        g([/nomor pemeriksaan[^:]*:\s*([^\n]+)/i, /no\.?\s*pmrk[^:]*:\s*([^\n]+)/i, /pemeriksaan[^:]*:\s*([^\n]+)/i]),
+    tglNikah:      tgl,
+    namaSuami:     g([/nama\s+suami[^:]*:\s*([^\n]+)/i, /suami\s*:\s*([^\n]+)/i, /laki-laki\s*:\s*([^\n]+)/i]),
+    nikSuami:      g([/nik\s+suami[^:]*:\s*([^\n]+)/i, /nik\s*\(suami\)[^:]*:\s*([^\n]+)/i]),
+    ttlSuami:      g([/tempat.*lahir.*suami[^:]*:\s*([^\n]+)/i, /lahir\s+suami[^:]*:\s*([^\n]+)/i]),
+    pekerjaanSuami:g([/pekerjaan\s+suami[^:]*:\s*([^\n]+)/i]),
+    alamatSuami:   g([/alamat\s+suami[^:]*:\s*([^\n]+)/i]),
+    namaIstri:     g([/nama\s+ist[re]i[^:]*:\s*([^\n]+)/i, /ist[re]i\s*:\s*([^\n]+)/i, /perempuan\s*:\s*([^\n]+)/i]),
+    nikIstri:      g([/nik\s+ist[re]i[^:]*:\s*([^\n]+)/i, /nik\s*\(ist[re]i\)[^:]*:\s*([^\n]+)/i]),
+    ttlIstri:      g([/tempat.*lahir.*ist[re]i[^:]*:\s*([^\n]+)/i, /lahir\s+ist[re]i[^:]*:\s*([^\n]+)/i]),
+    pekerjaanIstri:g([/pekerjaan\s+ist[re]i[^:]*:\s*([^\n]+)/i]),
+    alamatIstri:   g([/alamat\s+ist[re]i[^:]*:\s*([^\n]+)/i]),
+    namaWali:      g([/nama\s+wali[^:]*:\s*([^\n]+)/i, /wali\s+nikah[^:]*:\s*([^\n]+)/i, /wali\s*:\s*([^\n]+)/i]),
+    kua:           g([/kua\s+kecamatan[^:]*:\s*([^\n]+)/i, /kantor\s+urusan\s+agama[^:]*:\s*([^\n]+)/i, /kecamatan[^:]*:\s*([^\n]+)/i]),
+    tempatAkad:    g([/tempat\s+akad[^:]*:\s*([^\n]+)/i, /tempat\s+nikah[^:]*:\s*([^\n]+)/i]),
+  };
+}
+
+function parseIjazahText(raw) {
+  const t = raw.replace(/\r\n/g,'\n');
+  const g = (patterns) => {
+    for (const p of patterns) {
+      const m = t.match(p);
+      if (m && m[1] && m[1].trim().length > 1) return m[1].trim();
+    }
+    return '';
+  };
+  // Deteksi jenjang
+  let jenjang = '';
+  if (/\bMA\b|MADRASAH ALIYAH/i.test(t)) jenjang = 'MA';
+  else if (/\bMTs\b|MADRASAH TSANAWIYAH/i.test(t)) jenjang = 'MTs';
+  else if (/\bMI\b|MADRASAH IBTIDAIYAH/i.test(t)) jenjang = 'MI';
+
+  return {
+    noIjazah:    g([/nomor[^:]*ijazah[^:]*:\s*([^\n]+)/i, /no\.?\s*ijazah[^:]*:\s*([^\n]+)/i, /nomor\s*:\s*([^\n]+)/i]),
+    namaSiswa:   g([/nama\s+siswa[^:]*:\s*([^\n]+)/i, /nama\s+peserta[^:]*:\s*([^\n]+)/i, /nama\s*:\s*([^\n]+)/i, /yang\s+bernama[^:]*:\s*([^\n]+)/i]),
+    ttl:         g([/tempat.*tanggal\s+lahir[^:]*:\s*([^\n]+)/i, /ttl[^:]*:\s*([^\n]+)/i, /lahir\s*:\s*([^\n]+)/i]),
+    nisn:        g([/nisn[^:]*:\s*([^\n]+)/i, /nomor\s+induk\s+siswa\s+nasional[^:]*:\s*([^\n]+)/i]),
+    madrasah:    g([/nama\s+madrasah[^:]*:\s*([^\n]+)/i, /madrasah[^:]*:\s*([^\n]+)/i, /sekolah[^:]*:\s*([^\n]+)/i, /(M[AI]N?\s+\d+[^\n]*)/i, /(MTsN?\s+\d+[^\n]*)/i]),
+    jenjang:     jenjang,
+    jurusan:     g([/jurusan[^:]*:\s*([^\n]+)/i, /program\s+studi[^:]*:\s*([^\n]+)/i, /kompetensi[^:]*:\s*([^\n]+)/i]),
+    tahunLulus:  g([/tahun\s+pelajaran[^:]*:\s*([^\n]+)/i, /lulus\s+tahun[^:]*:\s*([^\n]+)/i, /(\d{4}\/\d{4})/]),
+    nilaiRataRata: g([/nilai\s+rata[^:]*:\s*([^\n]+)/i, /rata.rata[^:]*:\s*([^\n]+)/i]),
+  };
+}
+
 // KONFIGURASI SUPABASE + CLOUDFLARE R2
 // Ganti nilai di bawah setelah setup selesai
 // ══════════════════════════════════════════════════════
@@ -2793,49 +2968,9 @@ const SUPABASE_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
 
 // ══════════════════════════════════════════════════════════════════
 // ENKRIPSI NIK — AES-GCM via Web Crypto API (built-in browser)
-// PENTING: Ganti NIK_SECRET dengan string acak panjang milik Anda
-// Simpan string ini di tempat aman — jangan ubah setelah data masuk!
-// Generate: buka Console browser → ketik: crypto.getRandomValues(new Uint8Array(32)).join(',')
-// ══════════════════════════════════════════════════════════════════
-const NIK_SECRET = 'GANTI_DENGAN_32_BYTE_SECRET_ANDA'; // wajib diisi
 
-async function getNikKey(){
-  const raw = new TextEncoder().encode(NIK_SECRET.padEnd(32,'0').substring(0,32));
-  return crypto.subtle.importKey('raw', raw, {name:'AES-GCM'}, false, ['encrypt','decrypt']);
-}
 
-async function encryptNIK(nik){
-  if(!nik || nik.trim()==='') return null;
-  if(NIK_SECRET==='GANTI_DENGAN_32_BYTE_SECRET_ANDA') return nik; // Fallback jika belum dikonfigurasi
-  try{
-    const key = await getNikKey();
-    const iv  = crypto.getRandomValues(new Uint8Array(12));
-    const enc = await crypto.subtle.encrypt({name:'AES-GCM',iv}, key, new TextEncoder().encode(nik));
-    // Gabung iv + ciphertext → base64
-    const combined = new Uint8Array(iv.byteLength + enc.byteLength);
-    combined.set(iv, 0); combined.set(new Uint8Array(enc), iv.byteLength);
-    return 'ENC:' + btoa(String.fromCharCode(...combined));
-  }catch(e){ console.warn('Enkripsi NIK gagal:', e.message); return nik; }
-}
-
-async function decryptNIK(val){
-  if(!val || !val.startsWith('ENC:')) return val||''; // Belum dienkripsi atau kosong
-  if(NIK_SECRET==='GANTI_DENGAN_32_BYTE_SECRET_ANDA') return val;
-  try{
-    const key  = await getNikKey();
-    const data = Uint8Array.from(atob(val.slice(4)), c=>c.charCodeAt(0));
-    const iv   = data.slice(0,12);
-    const enc  = data.slice(12);
-    const dec  = await crypto.subtle.decrypt({name:'AES-GCM',iv}, key, enc);
-    return new TextDecoder().decode(dec);
-  }catch(e){ console.warn('Dekripsi NIK gagal:', e.message); return '[terenkripsi]'; }
-}
-
-// Init Supabase client
-const { createClient } = supabase;
-const sb = (SUPABASE_URL !== 'GANTI_DENGAN_PROJECT_URL')
-  ? createClient(SUPABASE_URL, SUPABASE_KEY)
-  : null;
+// Supabase diganti dengan Cloudflare Worker (sb=null sudah di atas)
 
 // ═══════════ STATE ═══════════
 const S={
@@ -2887,12 +3022,7 @@ function initData(){
 
 // Login Google OAuth
 async function lG(){
-  if(!sb){alert('Supabase belum dikonfigurasi.\nIsi SUPABASE_URL dan SUPABASE_KEY terlebih dahulu.');return;}
-  const {error}=await sb.auth.signInWithOAuth({
-    provider:'google',
-    options:{redirectTo: window.location.href}
-  });
-  if(error) alert('Login Google gagal: '+error.message);
+  alert('Login Google tidak tersedia. Gunakan email & password.');
 }
 
 // Login Email + Password
@@ -2963,43 +3093,26 @@ function startLockoutCountdown(email,seconds){
 }
 
 async function doLogin(){
-  const email=document.getElementById('em').value.trim();
-  const pass =document.getElementById('pw')?.value||'';
+  const email = document.getElementById('em').value.trim();
+  const pass  = document.getElementById('pw')?.value||'';
   hideLoginError();
-  if(!email){showLoginError('Masukkan username/email terlebih dahulu.');return;}
-
-  // Cek brute force lockout
-  const locked=BF.isLocked(email);
-  if(locked){startLockoutCountdown(email,locked);return;}
-
-  if(!sb){
-    const role=document.getElementById('rl')?.value||'kabupaten';
-    const demoSatker={kua:'KUA Kecamatan Sumbersari',madrasah:'MAN 1 Jember',kepegawaian:'Kemenag Kab. Jember',kabupaten:'Kemenag Kab. Jember',admin:'Kemenag Kab. Jember'};
-    pL(email.split('@')[0], email, role, demoSatker[role]||'Kemenag Kab. Jember');
-    return;
-  }
-
-  // Tambah delay kecil untuk mencegah timing attack
+  if(!email){ showLoginError('Masukkan email terlebih dahulu.'); return; }
+  const locked = BF.isLocked(email);
+  if(locked){ startLockoutCountdown(email,locked); return; }
   await new Promise(r=>setTimeout(r,400));
   setLoginLoading(true);
   try{
-    const {data,error}=await sb.auth.signInWithPassword({email,password:pass});
-    if(error){
-      setLoginLoading(false);
-      const remaining=BF.fail(email);
-      if(remaining<=0){
-        startLockoutCountdown(email, Math.ceil(BF.LOCKOUT_MS/1000));
-      } else {
-        showLoginError(`Login gagal. Sisa percobaan: ${remaining}x sebelum akun dikunci 15 menit.`);
-      }
-      return;
-    }
-    BF.reset(email); // Reset counter jika berhasil
-    const selectedRole=document.getElementById('rl')?.value||'kabupaten';
-    await loadUserProfile(data.user, selectedRole);
+    const data = await api('POST','/auth/login',{email,password:pass});
+    _token = data.token;
+    localStorage.setItem('sipadi_token', _token);
+    BF.reset(email);
+    const u = data.user;
+    pL(u.nama||email.split('@')[0], email, u.role, u.satker||'Kemenag Kab. Jember');
   }catch(e){
     setLoginLoading(false);
-    showLoginError('Login error: '+e.message);
+    const remaining = BF.fail(email);
+    if(remaining<=0){ startLockoutCountdown(email, Math.ceil(BF.LOCKOUT_MS/1000)); }
+    else { showLoginError(`Login gagal: ${e.message}. Sisa percobaan: ${remaining}x`); }
   }
 }
 
@@ -3011,75 +3124,6 @@ function setLoginLoading(on, msg){
   btn.style.opacity = on ? '.75' : '1';
 }
 
-async function loadUserProfile(user, selectedRole){
-  if(!user) return;
-  S.userId    = user.id;
-  S.userEmail = user.email;
-
-  // Helper: tebak role & satker dari email sebagai fallback
-  function guessFromEmail(email){
-    email = (email||'').toLowerCase();
-    if(email.includes('kua.'))       return {role:'kua',         satker:'KUA Kecamatan'};
-    if(email.includes('kepeg'))      return {role:'kepegawaian', satker:'Kemenag Kab. Jember'};
-    if(/min\.|mtsn\.|man\.|mi\./.test(email)) return {role:'madrasah', satker:'Madrasah'};
-    if(email.includes('admin'))      return {role:'kabupaten',   satker:'Kemenag Kab. Jember'};
-    // Gunakan role yang dipilih user di dropdown sebagai fallback terakhir
-    const fallbackRole = selectedRole || 'kabupaten';
-    const fallbackSatker = {
-      kabupaten:'Kemenag Kab. Jember', kua:'KUA Kecamatan',
-      madrasah:'Madrasah', kepegawaian:'Kemenag Kab. Jember'
-    }[fallbackRole] || 'Kemenag Kab. Jember';
-    return {role: fallbackRole, satker: fallbackSatker};
-  }
-
-  // Helper: query dengan timeout dan 1x retry
-  async function queryWithRetry(timeoutMs = 15000){
-    for(let attempt = 1; attempt <= 2; attempt++){
-      try{
-        if(attempt === 2){
-          setLoginLoading(true, '🔄 Menghubungkan ulang...');
-          await new Promise(r => setTimeout(r, 1500)); // Jeda sebelum retry
-        }
-        const queryPromise = sb.from('user_profiles').select('*').eq('id', user.id).single();
-        const timeout = new Promise((_,rej) => setTimeout(() => rej(new Error('timeout')), timeoutMs));
-        const result = await Promise.race([queryPromise, timeout]);
-        return result; // {data, error}
-      } catch(e){
-        if(attempt === 2) throw e; // Lempar setelah 2x gagal
-        console.warn(`Attempt ${attempt} timeout, retrying...`);
-      }
-    }
-  }
-
-  try {
-    setLoginLoading(true, '🔄 Memuat profil...');
-    const {data:prof, error:profErr} = await queryWithRetry(15000);
-
-    if(profErr){
-      // Tabel belum ada atau row tidak ditemukan — pakai fallback email, TANPA warning
-      console.info('user_profiles:', profErr.message, '— menggunakan fallback email');
-      const {role, satker} = guessFromEmail(user.email);
-      const nama = user.email.split('@')[0];
-      pL(nama, user.email, role, satker);
-    } else {
-      const role   = prof?.role   || guessFromEmail(user.email).role;
-      const satker = prof?.satker || 'Kemenag Kab. Jember';
-      const nama   = prof?.nama   || user.email.split('@')[0];
-      pL(nama, user.email, role, satker);
-    }
-
-  } catch(e) {
-    // Timeout total setelah 2x retry → login tetap masuk, tampilkan toast (bukan alert)
-    console.warn('loadUserProfile gagal setelah retry:', e.message);
-    const {role, satker} = guessFromEmail(user.email);
-    const nama = user.email.split('@')[0];
-    // Toast non-blocking menggantikan alert() yang membekukan halaman
-    showToast('⚠️ Database Supabase sedang aktif kembali (free tier). Akses penuh tersedia 1–2 menit lagi.', 'warn');
-    pL(nama, user.email, role, satker);
-  } finally {
-    setLoginLoading(false);
-  }
-}
 
 function pL(nm, em, role, satker){
   S.role    = role;
@@ -3136,7 +3180,7 @@ function pL(nm, em, role, satker){
   document.getElementById('app').style.display='block';
   // Render awal: struktur satuan kerja langsung, tabel data tunggu Supabase
   updD(); renderSk();
-  if(sb) showLoadingTables(); else { renderN(); renderI(); renderO(); renderLap(); }
+  showLoadingTables();
 
   // Arahkan ke halaman default sesuai role
   if (role === 'kua') {
@@ -3150,62 +3194,39 @@ function pL(nm, em, role, satker){
   }
 
   // Muat data dari Supabase (async)
-  if(sb) loadAllData();
+  loadAllData();
 }
 
 async function doLogout(){
-  try{ if(sb) await sb.auth.signOut(); }catch(e){}
-  // Reset semua state
+  try{ await api('POST','/auth/logout'); }catch(e){}
+  _token=null; localStorage.removeItem('sipadi_token');
   S.userId=null; S.userEmail=null; S.role=null; S.satker=null;
   S.nikah=[]; S.ijazah=[]; S.pegawai=[]; S.riwayat=[]; S.ops=[];
-  // Reset badge
   ['nbN','nbI','nbD','nbKp'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent='0';});
-  // Tampilkan halaman login
   document.getElementById('lp').style.display='flex';
   document.getElementById('app').style.display='none';
-  // Clear localStorage session
-  try{ Object.keys(localStorage).forEach(k=>{ if(k.startsWith('sb-')) localStorage.removeItem(k); }); }catch(e){}
 }
 
-// ══════════════════════════════════════════════════════
-// LOAD DATA DARI SUPABASE
-// ══════════════════════════════════════════════════════
-
 async function loadOps(){
-  if(!sb) return;
-  // Ambil SEMUA operator dari user_profiles kecuali role viewer
-  const {data, error} = await sb.from('user_profiles')
-    .select('id, nama, email, role, satker, hp, status')
-    .neq('role','viewer')
-    .order('nama', {ascending:true});
-  if(error){ console.warn('loadOps error:', error.message); return; }
-  S.ops = (data||[]).map(r=>({
-    id:     r.id,
-    nama:   r.nama || r.email.split('@')[0],
-    email:  r.email,
-    role:   r.role,
-    satker: r.satker || '',
-    hp:     r.hp    || '',
-    status: r.status|| 'aktif'
-  }));
-  // Update jumlah operator aktif di stat cards & render tabel operator
-  updD();
-  renderO();
+  try{
+    const data = await api('GET','/operators');
+    S.ops = (data.operators||[]).map(r=>({
+      id:r.id, nama:r.nama||r.email, email:r.email,
+      role:r.role, satker:r.satker||'', hp:r.hp||'', status:r.status||'aktif'
+    }));
+    updD(); renderO();
+  }catch(e){ console.warn('loadOps:',e.message); }
 }
 
 async function loadAllData(){
-  // Reset dulu (jangan tampilkan dummy saat menunggu)
   S.nikah=[]; S.ijazah=[]; S.ops=[]; S.pegawai=[]; S.riwayat=[];
-  // Render tabel kosong dengan loading indicator
   showLoadingTables();
-  // Muat data sesuai role secara paralel
   const loads = [];
-  if (['kabupaten','admin','kua'].includes(S.role))         loads.push(loadNikah());
-  if (['kabupaten','admin','madrasah'].includes(S.role))    loads.push(loadIjazah());
-  if (['kabupaten','admin','kepegawaian'].includes(S.role)) loads.push(loadPegawai());
-  if (['kabupaten','admin'].includes(S.role))               loads.push(loadOps());
+  if(['kabupaten','admin','kua'].includes(S.role))         loads.push(loadNikah());
+  if(['kabupaten','admin','madrasah'].includes(S.role))    loads.push(loadIjazah());
+  if(['kabupaten','admin','kepegawaian'].includes(S.role)) loads.push(loadPegawai());
+  if(['kabupaten','admin'].includes(S.role))               loads.push(loadOps());
   await Promise.all(loads);
-  // Render final setelah semua selesai
   updD(); renderN(); renderI(); renderSk(); renderO(); renderLap();
 }
 
@@ -3221,83 +3242,50 @@ function showLoadingTables(){
 }
 
 async function loadNikah(){
-  if(!sb) return;
-  let q = sb.from('register_nikah').select('*').order('tgl',{ascending:false}).limit(500);
-  // Filter per KUA langsung dari kolom kua (bukan satker_id)
-  if(S.role==='kua'){
-    const kuaNama = S.satker.replace('KUA Kecamatan ','');
-    q = q.eq('kua', kuaNama);
-  }
-  const {data,error}=await q;
-  if(error){console.error('loadNikah:',error);return;}
-  S.nikah = await Promise.all((data||[]).map(async r=>({
-    id:r.id, noAkta:r.no_akta, noPmrk:r.no_pmrk,
-    tgl:r.tgl, suami:r.suami, suamiNik:await decryptNIK(r.suami_nik),
-    suamiTtl:r.suami_ttl, suamiPek:r.suami_pek,
-    suamiAlamat:r.suami_alamat||'',
-    istri:r.istri, istriNik:await decryptNIK(r.istri_nik),
-    istriTtl:r.istri_ttl, istriPek:r.istri_pek,
-    istriAlamat:r.istri_alamat||'',
-    kua:r.kua, tempat:r.tempat, wali:r.wali,
-    status:r.status, hash:r.hash, fileUrl:r.file_url
-  })));
-  updD();renderN();renderLap();
+  try{
+    const data = await api('GET','/nikah');
+    S.nikah = await Promise.all((data.data||[]).map(async r=>({
+      id:r.id, noAkta:r.no_akta, noPmrk:r.no_pmrk,
+      tgl:r.tgl, suami:r.suami, suamiNik:await decryptNIK(r.suami_nik),
+      suamiTtl:r.suami_ttl, suamiPek:r.suami_pek, suamiAlamat:r.suami_alamat||'',
+      istri:r.istri, istriNik:await decryptNIK(r.istri_nik),
+      istriTtl:r.istri_ttl, istriPek:r.istri_pek, istriAlamat:r.istri_alamat||'',
+      kua:r.kua, tempat:r.tempat, wali:r.wali,
+      status:r.status, hash:r.hash, fileUrl:r.file_url
+    })));
+    updD(); renderN(); renderLap();
+  }catch(e){ console.warn('loadNikah:',e.message); }
 }
 
 async function loadIjazah(){
-  if(!sb) return;
-  let q = sb.from('ijazah').select('*').order('thn',{ascending:false}).limit(500);
-  if(S.role==='madrasah'){
-    q = q.eq('madrasah', S.satker);
-  }
-  const {data,error}=await q;
-  if(error){console.error('loadIjazah:',error);return;}
-  S.ijazah=(data||[]).map(r=>({
-    id:r.id, no:r.no, thn:r.thn,
-    nama:r.nama, ttl:r.ttl, madrasah:r.madrasah,
-    satker:r.satuan_kerja?.nama||r.madrasah,
-    jenjang:r.jenjang, nisn:r.nisn,
-    jurusan:r.jurusan, nilai:r.nilai,
-    status:r.status, hash:r.hash, fileUrl:r.file_url
-  }));
-  updD();renderI();renderLap();
+  try{
+    const data = await api('GET','/ijazah');
+    S.ijazah = (data.data||[]).map(r=>({
+      id:r.id, no:r.no, thn:r.thn,
+      nama:r.nama, ttl:r.ttl, madrasah:r.madrasah,
+      jenjang:r.jenjang, nisn:r.nisn, jurusan:r.jurusan, nilai:r.nilai,
+      status:r.status, hash:r.hash, fileUrl:r.file_url
+    }));
+    updD(); renderI(); renderLap();
+  }catch(e){ console.warn('loadIjazah:',e.message); }
 }
 
-// ══════════════════════════════════════════════════════
-// UPLOAD FILE KE SUPABASE STORAGE (gratis, tanpa kartu kredit)
-// ══════════════════════════════════════════════════════
-
 async function uploadFile(file, folder){
-  if(!sb || !file) return null;
-  try {
-    // Cek ukuran file - maksimal 10MB
-    const maxSize = 10 * 1024 * 1024;
+  if(!file) return null;
+  try{
+    const maxSize = 10*1024*1024;
     if(file.size > maxSize){
-      const confirm = window.confirm(
-        `File terlalu besar (${(file.size/1024/1024).toFixed(1)}MB). \n\nMaksimal 10MB. Simpan data tanpa file?`
-      );
-      if(!confirm) throw new Error('Upload dibatalkan user');
+      if(!confirm(`File terlalu besar (${(file.size/1024/1024).toFixed(1)}MB). Simpan tanpa file?`)) return null;
       return null;
     }
-
     const ext = file.name.split('.').pop().toLowerCase();
     const key = `${folder}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
-
-    // Upload dengan timeout 20 detik
-    const uploadPromise = sb.storage
-      .from('amanah-arsip')
-      .upload(key, file, { upsert: true, contentType: file.type });
-    const timeoutPromise = new Promise((_,rej) =>
-      setTimeout(() => rej(new Error('Upload timeout - data tetap disimpan tanpa file')), 20000)
-    );
-    const { data, error } = await Promise.race([uploadPromise, timeoutPromise]);
-    if(error){ console.warn('Storage upload error:', error.message); return null; }
-    const { data: urlData } = sb.storage.from('amanah-arsip').getPublicUrl(key);
-    return urlData?.publicUrl || null;
-  } catch(e) {
-    console.warn('Upload error (lanjut tanpa file):', e.message);
-    return null;
-  }
+    // Dapatkan presigned URL dari Worker
+    const {url} = await api('GET', `/upload-url?key=${encodeURIComponent(key)}&type=${encodeURIComponent(file.type)}`);
+    const res = await fetch(url, {method:'PUT', body:file, headers:{'Content-Type':file.type}});
+    if(!res.ok) throw new Error('Upload gagal: '+res.status);
+    return `${R2_URL}/${key}`;
+  }catch(e){ console.warn('uploadFile error:',e.message); return null; }
 }
 
 // ══════════════════════════════════════════════════════
@@ -3305,23 +3293,16 @@ async function uploadFile(file, folder){
 // ══════════════════════════════════════════════════════
 
 async function checkSession(){
-  if(!sb){
-    // Mode demo — tampilkan halaman login biasa
-    return;
+  const saved = localStorage.getItem('sipadi_token');
+  if(!saved) return;
+  _token = saved;
+  try{
+    const data = await api('GET','/auth/me');
+    const u = data.user;
+    pL(u.nama||u.email.split('@')[0], u.email, u.role, u.satker||'Kemenag Kab. Jember');
+  }catch(e){
+    _token=null; localStorage.removeItem('sipadi_token');
   }
-  const {data:{session}}=await sb.auth.getSession();
-  if(session?.user){
-    await loadUserProfile(session.user);
-  }
-  // Listen perubahan auth
-  sb.auth.onAuthStateChange(async(event,session)=>{
-    if(event==='SIGNED_IN' && session?.user){
-      await loadUserProfile(session.user);
-    } else if(event==='SIGNED_OUT'){
-      document.getElementById('lp').style.display='flex';
-      document.getElementById('app').style.display='none';
-    }
-  });
 }
 
 // ═══════════ POPULATE SELECTS ═══════════
@@ -3425,28 +3406,20 @@ async function saveN(){
       created_by:   S.userId||null
     };
 
-    if(sb){
-      let error, savedId=id;
-      if(id){ ({error}=await sb.from('register_nikah').update(row).eq('id',id)); }
-      else   {
-        const {data:ins,error:insErr}=await sb.from('register_nikah').insert(row).select('id').single();
-        error=insErr; if(ins) savedId=ins.id;
-      }
-      if(error){ alert('Gagal simpan: '+error.message); return; }
+    try{
+      let savedId = id;
+      if(id){ await api('PUT',`/nikah/${id}`,row); }
+      else{ const res=await api('POST','/nikah',row); savedId=res.id||res.data?.id; }
       await loadNikah();
       closeM('mNikah');
       showToast('✅ Register Nikah berhasil disimpan!', 'success');
-      // Upload file di background
       if(fileObj && savedId){
         uploadFile(fileObj,'nikah/'+kua.replace(/\s+/g,'_')).then(async fileUrl=>{
-          if(fileUrl){
-            await sb.from('register_nikah').update({file_url:fileUrl}).eq('id',savedId);
-            const idx2=S.nikah.findIndex(x=>x.id===savedId);
-            if(idx2>=0){ S.nikah[idx2].fileUrl=fileUrl; }
-          }
-        }).catch(e=>console.warn('Background upload error:',e));
+          if(fileUrl){ await api('PUT',`/nikah/${savedId}`,{file_url:fileUrl}); }
+        }).catch(e=>console.warn('Upload error:',e));
       }
-    } else {
+    }catch(err){ alert('Gagal simpan: '+err.message); return; }
+    if(false){
       const r={id:id||'N'+Date.now(),noAkta:na,noPmrk:row.no_pmrk,tgl,
         suami:sm,suamiNik:row.suami_nik,suamiTtl:row.suami_ttl,suamiPek:row.suami_pek,
         suamiAlamat:alamat,istri:st,istriNik:row.istri_nik,istriTtl:row.istri_ttl,
@@ -3487,8 +3460,8 @@ function edN(id){
 async function dlN(id){
   if(!confirm('Hapus data register nikah ini?')) return;
   if(sb){
-    const {error}=await sb.from('register_nikah').delete().eq('id',id);
-    if(error){alert('Gagal hapus: '+error.message);return;}
+    await api('DELETE',`/nikah/${id}`);
+    
     await loadNikah();
   } else {
     S.nikah=S.nikah.filter(x=>x.id!==id);renderN();updD();
@@ -3515,14 +3488,14 @@ function pvN(id){
           <!-- Overlay watermark visual -->
           <div style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:10">
             <!-- Watermark teks diagonal -->
-            <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-35deg);font-size:52px;font-weight:900;color:rgba(13,92,58,.12);white-space:nowrap;font-family:'Instrument Sans',sans-serif;letter-spacing:4px;user-select:none">AMANAH TERVERIFIKASI</div>
+            <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-35deg);font-size:52px;font-weight:900;color:rgba(13,92,58,.12);white-space:nowrap;font-family:'Instrument Sans',sans-serif;letter-spacing:4px;user-select:none">SIPADI TERVERIFIKASI</div>
             <!-- QR di pojok kanan atas -->
             <div style="position:absolute;top:10px;right:10px;background:rgba(255,255,255,.92);padding:6px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.2)">
               <div id="pvQR" style="width:64px;height:64px"></div>
               <div style="font-size:7px;text-align:center;color:#0d5c3a;font-weight:700;margin-top:3px">SCAN VERIFIKASI</div>
             </div>
             <!-- Badge status -->
-            <div style="position:absolute;bottom:10px;right:10px;background:rgba(13,92,58,.9);color:#fff;padding:5px 12px;border-radius:6px;font-size:10px;font-weight:700;letter-spacing:1px">✓ TERVERIFIKASI · AMANAH</div>
+            <div style="position:absolute;bottom:10px;right:10px;background:rgba(13,92,58,.9);color:#fff;padding:5px 12px;border-radius:6px;font-size:10px;font-weight:700;letter-spacing:1px">✓ TERVERIFIKASI · SIPADI</div>
           </div>
         </div>
       </div>`;
@@ -3545,7 +3518,7 @@ function pvN(id){
   </svg>
 </div>
       <div class="doc-header-text"><div class="dept">Republik Indonesia — Kementerian Agama</div><h1>AKTA NIKAH</h1><div class="subtitle">KUA Kecamatan ${n.kua} — Kabupaten Jember, Jawa Timur</div></div>
-      <div class="doc-verified-stamp" style="position:absolute;top:16px;right:16px;width:80px;height:80px;border-radius:50%;border:3px solid #0d5c3a;display:flex;align-items:center;justify-content:center;text-align:center;font-size:7.5px;font-weight:700;color:#0d5c3a;letter-spacing:1px;text-transform:uppercase;transform:rotate(-15deg);opacity:.65;font-family:'Instrument Sans',sans-serif;line-height:1.3;padding:8px">DOKUMEN<br>TERVERIFIKASI<br>AMANAH</div>
+      <div class="doc-verified-stamp" style="position:absolute;top:16px;right:16px;width:80px;height:80px;border-radius:50%;border:3px solid #0d5c3a;display:flex;align-items:center;justify-content:center;text-align:center;font-size:7.5px;font-weight:700;color:#0d5c3a;letter-spacing:1px;text-transform:uppercase;transform:rotate(-15deg);opacity:.65;font-family:'Instrument Sans',sans-serif;line-height:1.3;padding:8px">DOKUMEN<br>TERVERIFIKASI<br>SIPADI</div>
         <div class="doc-qr"><div id="dqr"></div><p>Scan untuk verifikasi</p><p>${n.noAkta}</p></div>
     </div>
     <div class="doc-row"><span class="k">Nomor Akta</span><span class="v">${n.noAkta}</span></div>
@@ -3609,7 +3582,7 @@ async function downloadWatermarked(id){
       const font = await pdfDoc.embedFont(PDFLib.StandardFonts.HelveticaBold);
 
       // Watermark teks diagonal di tengah setiap halaman
-      page.drawText('AMANAH TERVERIFIKASI', {
+      page.drawText('SIPADI TERVERIFIKASI', {
         x: width/2 - 180,
         y: height/2,
         size: 42,
@@ -3655,7 +3628,7 @@ async function downloadWatermarked(id){
         color: rgb(0.05, 0.36, 0.15),
         opacity: 0.85,
       });
-      page.drawText(`AMANAH · Kemenag Kab. Jember · ${n.noAkta} · Terverifikasi ${new Date().toLocaleDateString('id-ID')}`, {
+      page.drawText(`SIPADI · Kemenag Kab. Jember · ${n.noAkta} · Terverifikasi ${new Date().toLocaleDateString('id-ID')}`, {
         x: 10, y: 5,
         size: 7,
         font,
@@ -3669,7 +3642,7 @@ async function downloadWatermarked(id){
     const blob = new Blob([outBytes],{type:'application/pdf'});
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = `AMANAH_${n.noAkta}_terverifikasi.pdf`;
+    a.download = `SIPADI_${n.noAkta}_terverifikasi.pdf`;
     a.click();
     URL.revokeObjectURL(a.href);
     btn.textContent='✅ Selesai!';
@@ -3734,41 +3707,20 @@ async function saveI(){
       created_by: S.userId||null
     };
 
-    if(sb){
-      let error, savedId = id;
-      if(id){ ({error}=await sb.from('ijazah').update(row).eq('id',id)); }
-      else   {
-        const {data:ins, error:insErr}=await sb.from('ijazah').insert(row).select('id').single();
-        error=insErr; if(ins) savedId=ins.id;
-      }
-      if(error){ alert('Gagal simpan: '+error.message); return; }
+    try{
+      let savedId = id;
+      if(id){ await api('PUT',`/ijazah/${id}`,row); }
+      else{ const res=await api('POST','/ijazah',row); savedId=res.id||res.data?.id; }
       await loadIjazah();
       closeM('mIjazah');
-      // Tampilkan notifikasi berhasil
       showToast('✅ Ijazah berhasil disimpan!', 'success');
-
-      // Upload file di background setelah modal tutup
       if(fileObj && savedId){
         const folderKey = mad.replace(/\s+/g,'_');
-        uploadFile(fileObj, 'ijazah/'+folderKey).then(async fileUrl=>{
-          if(fileUrl){
-            await sb.from('ijazah').update({file_url:fileUrl}).eq('id',savedId);
-            // Update state lokal
-            const idx2=S.ijazah.findIndex(x=>x.id===savedId);
-            if(idx2>=0){ S.ijazah[idx2].fileUrl=fileUrl; }
-          }
-        }).catch(e=>console.warn('Background upload error:',e));
+        uploadFile(fileObj,'ijazah/'+folderKey).then(async fileUrl=>{
+          if(fileUrl){ await api('PUT',`/ijazah/${savedId}`,{file_url:fileUrl}); }
+        }).catch(e=>console.warn('Upload error:',e));
       }
-    } else {
-      const r={id:id||'I'+Date.now(),no,noSeri:seri,thn,nama:nm,ttl,
-        kepala,madrasah:mad,jenjang,
-        nisn:row.nisn,jurusan:row.jurusan,nilai:row.nilai,
-        status:'terverifikasi',hash,fileUrl:null};
-      if(id){const x=S.ijazah.findIndex(n=>n.id===id);if(x>=0)S.ijazah[x]=r;}
-      else S.ijazah.unshift(r);
-      renderI();updD();renderLap();
-      closeM('mIjazah');
-    }
+    } catch(e_save) { console.warn('saveI:',e_save.message); }
   } catch(e) {
     alert('Error saat menyimpan: '+e.message);
     console.error('saveI error:',e);
@@ -3800,7 +3752,7 @@ function edI(id){
 async function dlI(id){
   if(!confirm('Hapus data ijazah?')) return;
   if(sb){
-    const {error}=await sb.from('ijazah').delete().eq('id',id);
+    await api('DELETE',`/ijazah/${id}`);
     if(error){alert('Gagal hapus: '+error.message);return;}
     await loadIjazah();
   } else {
@@ -3827,12 +3779,12 @@ function pvI(id){
         <div style="position:relative;border-radius:8px;overflow:hidden">
           <iframe src="${n.fileUrl}" style="width:100%;height:520px;border:none;border-radius:8px;background:#fff"></iframe>
           <div style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:10">
-            <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-35deg);font-size:48px;font-weight:900;color:rgba(13,92,58,.11);white-space:nowrap;font-family:'Instrument Sans',sans-serif;letter-spacing:4px;user-select:none">AMANAH TERVERIFIKASI</div>
+            <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-35deg);font-size:48px;font-weight:900;color:rgba(13,92,58,.11);white-space:nowrap;font-family:'Instrument Sans',sans-serif;letter-spacing:4px;user-select:none">SIPADI TERVERIFIKASI</div>
             <div style="position:absolute;top:10px;right:10px;background:rgba(255,255,255,.92);padding:6px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.2)">
               <div id="pvQR" style="width:64px;height:64px"></div>
               <div style="font-size:7px;text-align:center;color:#0d5c3a;font-weight:700;margin-top:3px">SCAN VERIFIKASI</div>
             </div>
-            <div style="position:absolute;bottom:10px;right:10px;background:rgba(13,92,58,.9);color:#fff;padding:5px 12px;border-radius:6px;font-size:10px;font-weight:700;letter-spacing:1px">✓ TERVERIFIKASI · AMANAH</div>
+            <div style="position:absolute;bottom:10px;right:10px;background:rgba(13,92,58,.9);color:#fff;padding:5px 12px;border-radius:6px;font-size:10px;font-weight:700;letter-spacing:1px">✓ TERVERIFIKASI · SIPADI</div>
           </div>
         </div>
       </div>`;
@@ -3903,7 +3855,7 @@ async function downloadWatermarkedI(id){
       const {width,height}=page.getSize();
       const font=await pdfDoc.embedFont(PDFLib.StandardFonts.HelveticaBold);
 
-      page.drawText('AMANAH TERVERIFIKASI',{
+      page.drawText('SIPADI TERVERIFIKASI',{
         x:width/2-180, y:height/2,
         size:42, font,
         color:rgb(0.05,0.36,0.15),
@@ -3922,7 +3874,7 @@ async function downloadWatermarkedI(id){
       }
 
       page.drawRectangle({x:0,y:0,width,height:18,color:rgb(0.05,0.36,0.15),opacity:0.85});
-      page.drawText(`AMANAH · Kemenag Kab. Jember · ${n.no} · ${n.nama} · Terverifikasi ${new Date().toLocaleDateString('id-ID')}`,{
+      page.drawText(`SIPADI · Kemenag Kab. Jember · ${n.no} · ${n.nama} · Terverifikasi ${new Date().toLocaleDateString('id-ID')}`,{
         x:10,y:5,size:7,font,color:rgb(1,1,1),opacity:0.95,
       });
     }
@@ -3931,7 +3883,7 @@ async function downloadWatermarkedI(id){
     const blob=new Blob([outBytes],{type:'application/pdf'});
     const a=document.createElement('a');
     a.href=URL.createObjectURL(blob);
-    a.download=`AMANAH_Ijazah_${n.nama.replace(/\s+/g,'_')}_${n.no.replace(/\//g,'-')}.pdf`;
+    a.download=`SIPADI_Ijazah_${n.nama.replace(/\s+/g,'_')}_${n.no.replace(/\//g,'-')}.pdf`;
     a.click();
     URL.revokeObjectURL(a.href);
     btn.textContent='✅ Selesai!';
@@ -4026,35 +3978,12 @@ async function saveO(){
   try {
     let userId = id;
 
-    if(!id && sb){
-      // ── BARU: Daftarkan ke Supabase Auth ──
-      const {data:signData, error:signErr} = await sb.auth.signUp({
-        email: em,
-        password: pw,
-        options: { data: { nama: nm } }
-      });
-      if(signErr) throw new Error('Gagal daftarkan akun: ' + signErr.message);
-      userId = signData.user?.id || ('O'+Date.now());
-
-      // Simpan profil ke user_profiles
-      if(sb && signData.user){
-        await sb.from('user_profiles').upsert({
-          id: userId, nama: nm, email: em,
-          role, satker, hp, status
-        });
-      }
-      showToast('✅ Operator berhasil didaftarkan! Email konfirmasi dikirim ke '+em);
-
-    } else if(id && sb){
-      // ── EDIT: Update user_profiles saja ──
-      const {error:upErr} = await sb.from('user_profiles').update({
-        nama: nm, email: em, role, satker, hp, status
-      }).eq('id', id);
-      if(upErr) console.warn('Update user_profiles:', upErr.message);
-      showToast('✅ Data operator berhasil diperbarui');
+    if(!id){
+      await api('POST','/operators',{nama:nm,email:em,password:pw,role,satker,hp,status});
+      showToast('✅ Operator berhasil didaftarkan!');
     } else {
-      // Mode demo (tanpa Supabase)
-      showToast('✅ Operator disimpan (mode demo)');
+      await api('PUT',`/operators/${id}`,{nama:nm,email:em,role,satker,hp,status});
+      showToast('✅ Data operator berhasil diperbarui');
     }
 
     // Update state lokal
@@ -4106,25 +4035,24 @@ async function verD(){
   let dn=S.nikah.find(x=>x.hash===q||x.noAkta===q);
   let di=S.ijazah.find(x=>x.hash===q||x.no===q);
 
-  // Jika tidak ada di lokal, cari langsung ke Supabase
-  if(!dn && !di && sb){
-    const [rN,rI] = await Promise.all([
-      sb.from('register_nikah').select('*').or(`hash.eq.${q},no_akta.eq.${q}`).limit(1),
-      sb.from('ijazah').select('*').or(`hash.eq.${q},no.eq.${q}`).limit(1)
-    ]);
-    if(rN.data?.[0]){
-      const row=rN.data[0];
-      dn={id:row.id,noAkta:row.no_akta,hash:row.hash,suami:row.suami,istri:row.istri,kua:row.kua,status:row.status};
-    }
-    if(rI.data?.[0]){
-      const row=rI.data[0];
-      di={id:row.id,no:row.no,hash:row.hash,nama:row.nama,madrasah:row.madrasah,thn:row.thn,status:row.status};
-    }
+  // Jika tidak ada di lokal, cari ke Worker
+  if(!dn && !di){
+    try{
+      const res = await api('GET',`/verify/${encodeURIComponent(q)}`);
+      if(res.type==='nikah' && res.data){
+        const row=res.data;
+        dn={id:row.id,noAkta:row.no_akta,hash:row.hash,suami:row.suami,istri:row.istri,kua:row.kua,status:row.status};
+      }
+      if(res.type==='ijazah' && res.data){
+        const row=res.data;
+        di={id:row.id,no:row.no,hash:row.hash,nama:row.nama,madrasah:row.madrasah,thn:row.thn,status:row.status};
+      }
+    }catch(e){ console.warn('verD lookup:',e.message); }
   }
 
   const doc=dn||di; const isN=!!dn;
   if(doc){
-    r.innerHTML=`<div class="alert alert-ok" style="margin-bottom:14px">✅ Dokumen VALID — terautentikasi dalam sistem AMANAH Kemenag Kab. Jember</div>
+    r.innerHTML=`<div class="alert alert-ok" style="margin-bottom:14px">✅ Dokumen VALID — terautentikasi dalam sistem SIPADI Kemenag Kab. Jember</div>
     <div class="card" style="animation:none"><div class="card-body">
       <div style="display:flex;gap:10px;margin-bottom:8px">
         <span class="badge badge-jade">${isN?'Register Nikah':'Ijazah Madrasah'}</span>
@@ -4140,7 +4068,7 @@ async function verD(){
       <div style="margin-top:12px;padding:10px;background:rgba(0,0,0,.3);border-radius:8px;font-family:'DM Mono',monospace;font-size:10px;color:var(--cream4)">🔒 ${doc.hash}</div>
     </div></div>`;
   } else {
-    r.innerHTML=`<div class="alert alert-err">❌ Dokumen <strong>tidak ditemukan</strong> atau hash tidak valid dalam sistem AMANAH</div>`;
+    r.innerHTML=`<div class="alert alert-err">❌ Dokumen <strong>tidak ditemukan</strong> atau hash tidak valid dalam sistem SIPADI</div>`;
   }
 }
 
@@ -4268,44 +4196,23 @@ function exportAll(){
   const ts=new Date().toISOString().split('T')[0];
   const all={
     exported:new Date().toISOString(),
-    versi:'AMANAH v2.0',
+    versi:'SIPADI v2.0',
     satker:'Kemenag Kab. Jember',
     total:{nikah:S.nikah.length, ijazah:S.ijazah.length, pegawai:S.pegawai.length},
     register_nikah:S.nikah,
     arsip_ijazah:S.ijazah,
     pegawai:S.pegawai
   };
-  downloadFile(JSON.stringify(all,null,2), `backup_amanah_${ts}.json`, 'application/json');
+  downloadFile(JSON.stringify(all,null,2), `backup_sipadi_${ts}.json`, 'application/json');
 }
 
 // ══════════════════════════════════════════════════════════════════
 // FIX 3: AUDIT LOG — tampilkan di halaman Laporan
 // ══════════════════════════════════════════════════════════════════
 async function loadAuditLog(){
-  if(!sb){ showToast('Audit log membutuhkan koneksi Supabase','error'); return; }
-  const tb=document.getElementById('tAudit');
-  if(!tb) return;
-  tb.innerHTML='<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--cream4)">⟳ Memuat...</td></tr>';
-  try{
-    const {data,error}=await sb.from('audit_log')
-      .select('*').order('created_at',{ascending:false}).limit(100);
-    if(error) throw new Error(error.message);
-    if(!data?.length){
-      tb.innerHTML='<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--cream4)">Belum ada log aktivitas</td></tr>';
-      return;
-    }
-    const aksiColor={INSERT:'badge-jade',UPDATE:'badge-gold',DELETE:'badge-red'};
-    tb.innerHTML=data.map(r=>`<tr>
-      <td style="font-size:11px;white-space:nowrap">${new Date(r.created_at).toLocaleString('id-ID')}</td>
-      <td><span class="badge ${aksiColor[r.aksi]||'badge-blue'}">${r.aksi}</span></td>
-      <td class="td-mono" style="font-size:11px">${r.tabel}</td>
-      <td style="font-size:11px">${r.user_email||'-'}</td>
-      <td style="font-size:11px;color:var(--cream4)">${r.record_id||'-'}</td>
-    </tr>`).join('');
-    showToast('✅ Audit log dimuat: '+data.length+' entri');
-  }catch(e){
-    tb.innerHTML=`<tr><td colspan="5" style="text-align:center;padding:20px;color:#C0392B">❌ ${e.message} — pastikan tabel audit_log sudah dibuat via rls_setup.sql</td></tr>`;
-  }
+  // Audit log tidak tersedia di Worker API
+  const el = document.getElementById('auditTb');
+  if(el) el.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:20px;color:#6B7280">Fitur audit log belum tersedia</td></tr>';
 }
 
 // Tampilkan audit card hanya untuk admin kabupaten
@@ -4325,7 +4232,7 @@ function doPrint(){
   if(!el){alert('Tidak ada dokumen untuk dicetak');return;}
   const w=window.open('','_blank');
   const fonts='https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Instrument+Sans:wght@400;600&family=DM+Mono:wght@400&display=swap';
-  w.document.write('<!DOCTYPE html><html><head><title>Cetak AMANAH</title>'
+  w.document.write('<!DOCTYPE html><html><head><title>Cetak SIPADI</title>'
     +'<link href="'+fonts+'" rel="stylesheet">'
     +'<style>'
     +'*{box-sizing:border-box;margin:0;padding:0}'
@@ -4344,7 +4251,7 @@ function doPrint(){
     +'.doc-row .v{font-weight:600;color:#222}'
     +'.doc-hash{margin-top:18px;padding:10px 14px;background:#f0faf5;border:1px solid #b8e0cc;border-radius:8px;font-family:\'DM Mono\',monospace;font-size:10px;color:#555;display:flex;align-items:center;gap:8px;flex-wrap:wrap}'
     +'canvas,img{display:block}'
-    +'.doc-preview::after{content:"AMANAH — KEMENAG JEMBER";position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-35deg);font-size:52px;font-weight:900;letter-spacing:6px;color:rgba(13,92,58,.07);white-space:nowrap;pointer-events:none;font-family:\'Playfair Display\',serif;z-index:0}'
+    +'.doc-preview::after{content:"SIPADI — KEMENAG JEMBER";position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-35deg);font-size:52px;font-weight:900;letter-spacing:6px;color:rgba(13,92,58,.07);white-space:nowrap;pointer-events:none;font-family:\'Playfair Display\',serif;z-index:0}'
     +'@media print{body{margin:0}.doc-preview::after{position:fixed}}'
     +'</style></head><body>');
   w.document.write(el.innerHTML);
@@ -4758,10 +4665,7 @@ initTheme();
 checkSession();});
 
 // ══════════════════════════════════════════════════════
-// SUPABASE WAKE-UP PING
-// Kirim ping ringan saat halaman dimuat agar Supabase
-// sudah "hangat" sebelum user klik tombol login.
-// Mengatasi masalah cold-start / auto-pause free tier.
+
 // ══════════════════════════════════════════════════════
 (function warmUpSupabase(){
   if(!sb) return;
@@ -4769,7 +4673,7 @@ checkSession();});
   setTimeout(async ()=>{
     try {
       await Promise.race([
-        sb.from('user_profiles').select('id').limit(1),
+        Promise.resolve(),
         new Promise(r => setTimeout(r, 30000)) // tidak blokir apapun
       ]);
       console.info('Supabase warm-up OK');
@@ -4983,12 +4887,11 @@ async function saveRiwayat() {
   const px = S.pegawai.findIndex(p=>p.id===pegId);
   if (px>=0) S.pegawai[px].golongan = ke;
 
-  if (sb) {
-    const { error } = await sb.from('riwayat_golongan').insert({
-      pegawai_id: pegId, dari: row.dari, ke, tmt,
-      no_sk: row.noSk, keterangan: row.keterangan,
-      created_by: S.userId||null
-    });
+  try {
+    await api('POST','/pegawai',{...S.pegawai.find(p=>p.id===pegId),golongan:ke});
+  } catch(e){ console.warn('saveRiwayat api:',e.message); }
+  if (true) {
+    const error = null;
     if (error) { alert('Gagal simpan: '+error.message); return; }
     await loadPegawai();
   } else {
@@ -5001,7 +4904,7 @@ async function saveRiwayat() {
 async function dlRiwayat(id) {
   if (!confirm('Hapus riwayat ini?')) return;
   if (sb) {
-    const { error } = await sb.from('riwayat_golongan').delete().eq('id', id);
+    // riwayat hanya lokal
     if (error) { alert('Gagal hapus: '+error.message); return; }
   }
   S.riwayat = S.riwayat.filter(r=>r.id!==id);
@@ -5062,8 +4965,8 @@ async function saveKp() {
       hash: row.hash, created_by: S.userId||null
     };
     let error;
-    if (id) { ({error}=await sb.from('pegawai').update(dbRow).eq('id',id)); }
-    else    { ({error}=await sb.from('pegawai').insert(dbRow)); }
+    if (id) { await api('PUT',`/pegawai/${id}`,dbRow); }
+    else    { await api('POST','/pegawai',dbRow); }
     if (error) { alert('Gagal simpan: '+error.message); return; }
     await loadPegawai();
   } else {
@@ -5089,12 +4992,11 @@ function edKp(id) {
 
 async function dlKp(id) {
   if (!confirm('Hapus data pegawai ini? Riwayat golongannya ikut terhapus.')) return;
-  if (sb) {
-    await sb.from('riwayat_golongan').delete().eq('pegawai_id', id);
-    const { error } = await sb.from('pegawai').delete().eq('id', id);
-    if (error) { alert('Gagal hapus: '+error.message); return; }
+  try {
+    await api('DELETE',`/pegawai/${id}`);
     await loadPegawai();
-  } else {
+  } catch(e) { alert('Gagal hapus: '+e.message); return; }
+  if (false) {
     S.pegawai  = S.pegawai.filter(x=>x.id!==id);
     S.riwayat  = S.riwayat.filter(r=>r.pegawaiId!==id);
     renderKp(); renderRiwayat(); updD();
@@ -5108,7 +5010,7 @@ function pvKp(id) {
   const rwPeg = S.riwayat.filter(r=>r.pegawaiId===p.id).sort((a,b)=>b.tmt.localeCompare(a.tmt));
   document.getElementById('pvT').textContent = '👔 Data Pegawai — ' + p.nama;
   document.getElementById('pvB').innerHTML = `<div class="doc-preview" id="pArea" style="position:relative">
-    <div class="doc-verified-stamp" style="position:absolute;top:16px;right:16px;width:80px;height:80px;border-radius:50%;border:3px solid #0d5c3a;display:flex;align-items:center;justify-content:center;text-align:center;font-size:7.5px;font-weight:700;color:#0d5c3a;letter-spacing:1px;text-transform:uppercase;transform:rotate(-15deg);opacity:.65;line-height:1.3;padding:8px">DOKUMEN<br>TERVERIFIKASI<br>AMANAH</div>
+    <div class="doc-verified-stamp" style="position:absolute;top:16px;right:16px;width:80px;height:80px;border-radius:50%;border:3px solid #0d5c3a;display:flex;align-items:center;justify-content:center;text-align:center;font-size:7.5px;font-weight:700;color:#0d5c3a;letter-spacing:1px;text-transform:uppercase;transform:rotate(-15deg);opacity:.65;line-height:1.3;padding:8px">DOKUMEN<br>TERVERIFIKASI<br>SIPADI</div>
     <div class="doc-header">
       <div style="width:65px;height:65px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
         <svg viewBox="0 0 65 65" xmlns="http://www.w3.org/2000/svg" width="65" height="65">
@@ -5154,33 +5056,20 @@ function pvKp(id) {
 
 // ─── LOAD DATA PEGAWAI + RIWAYAT dari Supabase ──────────────────
 async function loadPegawai() {
-  if (!sb) return;
-  let q = sb.from('pegawai').select('*').order('nama').limit(1000);
-  if (!['kabupaten','kepegawaian'].includes(S.role)) {
-    q = q.eq('satker', S.satker);
-  }
-  const { data, error } = await q;
-  if (error) { console.error('loadPegawai:', error); return; }
-  S.pegawai = (data||[]).map(r=>({
-    id:r.id, nip:r.nip, nama:r.nama, gelar:r.gelar,
-    ttl:r.ttl, tglLahir:r.tgl_lahir, jk:r.jk,
-    jabatan:r.jabatan, satker:r.satker, golongan:r.golongan,
-    tmtGol:r.tmt_golongan, eselon:r.eselon, tmtJab:r.tmt_jabatan,
-    jenis:r.jenis, pendidikan:r.pendidikan, prodi:r.prodi,
-    hp:r.hp, email:r.email, status:r.status,
-    catatan:r.catatan, fileUrl:r.file_url, hash:r.hash
-  }));
-  // Load riwayat golongan
-  const pegIds = S.pegawai.map(p=>p.id);
-  if (pegIds.length) {
-    const { data:rw } = await sb.from('riwayat_golongan')
-      .select('*').in('pegawai_id', pegIds).order('tmt',{ascending:false});
-    S.riwayat = (rw||[]).map(r=>({
-      id:r.id, pegawaiId:r.pegawai_id, dari:r.dari,
-      ke:r.ke, tmt:r.tmt, noSk:r.no_sk, keterangan:r.keterangan
+  try{
+    const data = await api('GET','/pegawai');
+    S.pegawai = (data.data||[]).map(r=>({
+      id:r.id, nip:r.nip, nama:r.nama, gelar:r.gelar,
+      ttl:r.ttl, tglLahir:r.tgl_lahir, jk:r.jk,
+      jabatan:r.jabatan, satker:r.satker, golongan:r.golongan,
+      tmtGol:r.tmt_golongan, eselon:r.eselon, tmtJab:r.tmt_jabatan,
+      jenis:r.jenis, pendidikan:r.pendidikan, prodi:r.prodi,
+      hp:r.hp, email:r.email, status:r.status,
+      catatan:r.catatan, fileUrl:r.file_url, hash:r.hash
     }));
-  }
-  renderKp(); updKpStat(); updD();
+    S.riwayat = [];
+    renderKp(); updKpStat(); updD();
+  }catch(e){ console.warn('loadPegawai:',e.message); }
 }
 
 // ─── INISIALISASI DATA DEMO ──────────────────────────────────────
@@ -5302,29 +5191,6 @@ function initTheme(){
   }
 })();
 
-
-// ══ WINDOW REGISTRATION ══
-(function(){
-  var fns = { nav:nav, doLogin:doLogin, doLogout:doLogout, togglePw:togglePw,
-    openM:openM, closeM:closeM, checkSession:checkSession, initTheme:initTheme,
-    saveN:saveN, edN:edN, dlN:dlN, fN:fN, saveI:saveI, edI:edI, dlI:dlI, fI:fI,
-    saveO:saveO, edO:edO, dlO:dlO, fO:fO, saveKp:saveKp, edKp:edKp, dlKp:dlKp,
-    renderKp:renderKp, pvN:pvN, pvI:pvI, pvKp:pvKp, gTab:gTab, scT:scT, stT:stT,
-    editSk:editSk, saveSk:saveSk, switchNikahTab:switchNikahTab,
-    switchIjazahTab:switchIjazahTab, kpSwitchTab:kpSwitchTab,
-    addRiwayat:addRiwayat, dlRiwayat:dlRiwayat,
-    handleOcrFile:handleOcrFile, handleOcrDrop:handleOcrDrop,
-    handleIjazahFile:handleIjazahFile, handleIjazahDrop:handleIjazahDrop,
-    applyOcrToForm:applyOcrToForm, applyIjazahOcr:applyIjazahOcr,
-    clearOcr:clearOcr, clearIjazahOcr:clearIjazahOcr, impScan:impScan,
-    procF:procF, verD:verD, exportCSV:exportCSV, exportJSON:exportJSON,
-    exportAll:exportAll, doPrint:doPrint, saveRiwayat:saveRiwayat,
-    loadAuditLog:loadAuditLog, downloadWatermarked:downloadWatermarked,
-    downloadWatermarkedI:downloadWatermarkedI };
-  Object.keys(fns).forEach(function(k){ 
-    if(typeof fns[k] !== 'undefined') window[k] = fns[k]; 
-  });
-})();
 </script>
 
 </body>
