@@ -4982,26 +4982,27 @@ function initTheme(){
 
 
 // ── Expose semua fungsi ke global window (fix untuk Vercel) ──
-// ══ FORCE GLOBAL REGISTRATION ══
-// Assign all functions to window explicitly, no typeof guard
-setTimeout(function() {
-  var fns = [
-    'addRiwayat','applyIjazahOcr','applyOcrToForm','clearIjazahOcr','clearOcr',
-    'closeM','dlI','dlKp','dlN','dlO','dlRiwayat','doLogin','doLogout','doPrint',
-    'downloadWatermarked','downloadWatermarkedI','edI','edKp','edN','edO','editSk',
-    'exportAll','exportCSV','exportJSON','fI','fN','fO','gTab',
-    'handleIjazahDrop','handleIjazahFile','handleOcrDrop','handleOcrFile',
-    'impScan','kpSwitchTab','loadAuditLog','nav','openM','procF',
-    'pvI','pvKp','pvN','renderKp','saveI','saveKp','saveN','saveO','saveSk',
-    'scT','stT','switchIjazahTab','switchNikahTab','togglePw','verD'
-  ];
-  fns.forEach(function(name) {
-    try {
-      var fn = eval(name);
-      if (typeof fn === 'function') window[name] = fn;
-    } catch(e) {}
-  });
-}, 0);
+// ══ DIRECT WINDOW REGISTRATION ══
+window.nav=nav; window.doLogin=doLogin; window.doLogout=doLogout;
+window.openM=openM; window.closeM=closeM; window.togglePw=togglePw;
+window.checkSession=checkSession; window.initTheme=initTheme;
+window.saveN=saveN; window.edN=edN; window.dlN=dlN; window.fN=fN;
+window.saveI=saveI; window.edI=edI; window.dlI=dlI; window.fI=fI;
+window.saveO=saveO; window.edO=edO; window.dlO=dlO; window.fO=fO;
+window.saveKp=saveKp; window.edKp=edKp; window.dlKp=dlKp; window.renderKp=renderKp;
+window.pvN=pvN; window.pvI=pvI; window.pvKp=pvKp;
+window.gTab=gTab; window.scT=scT; window.stT=stT;
+window.switchNikahTab=switchNikahTab; window.switchIjazahTab=switchIjazahTab;
+window.kpSwitchTab=kpSwitchTab; window.addRiwayat=addRiwayat;
+window.dlRiwayat=dlRiwayat; window.editSk=editSk; window.saveSk=saveSk;
+window.handleOcrFile=handleOcrFile; window.handleOcrDrop=handleOcrDrop;
+window.handleIjazahFile=handleIjazahFile; window.handleIjazahDrop=handleIjazahDrop;
+window.applyOcrToForm=applyOcrToForm; window.applyIjazahOcr=applyIjazahOcr;
+window.clearOcr=clearOcr; window.clearIjazahOcr=clearIjazahOcr;
+window.impScan=impScan; window.procF=procF; window.verD=verD;
+window.downloadWatermarked=downloadWatermarked; window.downloadWatermarkedI=downloadWatermarkedI;
+window.loadAuditLog=loadAuditLog; window.exportCSV=exportCSV;
+window.exportJSON=exportJSON; window.exportAll=exportAll; window.doPrint=doPrint;
 
 </script>
 
