@@ -2660,9 +2660,9 @@ const ALLM=[...MI,...MTS,...MAN];
 // ✅ Tidak ada batas request per hari/bulan
 // ══════════════════════════════════════════════════════
 
-// Core OCR Engine menggunakan Gemini Vision AI
-const GEMINI_KEY = 'AQ.Ab8RN6I8BbFCeedHzb6-dU6IyNAHVQyakptWQyrTdAWsa1fGbA';
-const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' + GEMINI_KEY;
+// Core OCR Engine menggunakan Mistral AI Vision
+const MISTRAL_KEY = 'tx9dwSGI6HuKzhQbAfKmmLaeJDFKVNKo';
+const MISTRAL_URL = 'https://api.mistral.ai/v1/chat/completions';
 
 async function fileToBase64(file) {
   return new Promise((resolve, reject) => {
@@ -2686,23 +2686,35 @@ async function pdfPageToBase64(file, pageNum) {
   return canvas.toDataURL('image/jpeg', 0.92).split(',')[1];
 }
 
-async function geminiOcr(base64, mimeType, prompt) {
+async function mistralOcr(base64, mimeType, prompt) {
   const body = {
-    contents: [{
-      parts: [
-        { inline_data: { mime_type: mimeType, data: base64 } },
-        { text: prompt }
+    model: 'pixtral-12b-2409',
+    messages: [{
+      role: 'user',
+      content: [
+        {
+          type: 'image_url',
+          image_url: { url: `data:${mimeType};base64,${base64}` }
+        },
+        { type: 'text', text: prompt }
       ]
-    }]
+    }],
+    max_tokens: 4096
   };
-  const res = await fetch(GEMINI_URL, {
+  const res = await fetch(MISTRAL_URL, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${MISTRAL_KEY}`
+    },
     body: JSON.stringify(body)
   });
-  if (!res.ok) throw new Error('Gemini API error: ' + res.status);
+  if (!res.ok) {
+    const err = await res.json().catch(()=>({}));
+    throw new Error('Mistral API error: ' + res.status + ' ' + (err.message||''));
+  }
   const data = await res.json();
-  return data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+  return data.choices?.[0]?.message?.content || '';
 }
 
 async function doOcrWithTesseract(file, onProgress) {
@@ -2710,7 +2722,7 @@ async function doOcrWithTesseract(file, onProgress) {
   const isPdf   = file.type === 'application/pdf';
   if (!isImage && !isPdf) throw new Error('Format tidak didukung. Gunakan JPG, PNG, atau PDF.');
 
-  const prompt = `Ekstrak SEMUA teks yang ada dalam dokumen ini secara lengkap dan akurat. 
+  const prompt = `Ekstrak SEMUA teks yang ada dalam dokumen ini secara lengkap dan akurat.
 Pertahankan format asli, termasuk baris baru, spasi, dan tanda baca.
 Jangan tambahkan interpretasi atau penjelasan — hanya teks mentah dari dokumen.
 Jika ada tabel, ekstrak baris per baris dengan pemisah yang jelas.`;
@@ -2722,7 +2734,7 @@ Jika ada tabel, ekstrak baris per baris dengan pemisah yang jelas.`;
   if (isImage) {
     const base64 = await fileToBase64(file);
     if (onProgress) onProgress(40);
-    rawText = await geminiOcr(base64, file.type, prompt);
+    rawText = await mistralOcr(base64, file.type, prompt);
     if (onProgress) onProgress(100);
 
   } else if (isPdf) {
@@ -2734,7 +2746,7 @@ Jika ada tabel, ekstrak baris per baris dengan pemisah yang jelas.`;
     for (let p = 1; p <= maxPages; p++) {
       if (onProgress) onProgress(Math.round(10 + (p-1)/maxPages * 80));
       const base64 = await pdfPageToBase64(file, p);
-      const text = await geminiOcr(base64, 'image/jpeg', prompt);
+      const text = await mistralOcr(base64, 'image/jpeg', prompt);
       rawText += text + '\n';
     }
     if (onProgress) onProgress(100);
@@ -4075,11 +4087,11 @@ async function procFR(file,t,rid){
   if(!allowed.includes(file.type)){el.innerHTML=`<div class="alert alert-err">❌ Format tidak didukung (PDF/JPG/PNG).</div>`;return;}
   if(file.size>20*1024*1024){el.innerHTML=`<div class="alert alert-err">❌ File terlalu besar (maks 20 MB).</div>`;return;}
 
-  el.innerHTML=`<div class="alert alert-info" style="display:flex;align-items:center;gap:10px"><span style="animation:spin 1s linear infinite;display:inline-block;font-size:18px">⟳</span><span>Memproses <strong>${file.name}</strong> dengan Gemini AI OCR…</span></div>`;
+  el.innerHTML=`<div class="alert alert-info" style="display:flex;align-items:center;gap:10px"><span style="animation:spin 1s linear infinite;display:inline-block;font-size:18px">⟳</span><span>Memproses <strong>${file.name}</strong> dengan Mistral AI OCR…</span></div>`;
 
   try{
     const rawText = await doOcrWithTesseract(file, pct => {
-      el.innerHTML=`<div class="alert alert-info" style="display:flex;align-items:center;gap:10px"><span style="animation:spin 1s linear infinite;display:inline-block;font-size:18px">⟳</span><span>Gemini AI memproses… <strong>${pct}%</strong></span></div>`;
+      el.innerHTML=`<div class="alert alert-info" style="display:flex;align-items:center;gap:10px"><span style="animation:spin 1s linear infinite;display:inline-block;font-size:18px">⟳</span><span>Mistral AI memproses… <strong>${pct}%</strong></span></div>`;
     });
     if(!rawText||rawText.trim().length<10) throw new Error('Teks tidak terdeteksi. Pastikan scan jelas.');
 
@@ -4307,7 +4319,7 @@ async function processIjazahOcr(file) {
   if (!allowed.includes(file.type)) { showIjazahStatus('error','❌ Format tidak didukung (JPG/PNG/PDF).'); return; }
   if (file.size > 20*1024*1024) { showIjazahStatus('error','❌ File terlalu besar (maks 20 MB).'); return; }
 
-  showIjazahStatus('loading','🔄 Membaca ijazah dengan Gemini AI… mohon tunggu.');
+  showIjazahStatus('loading','🔄 Membaca ijazah dengan Mistral AI… mohon tunggu.');
   document.getElementById('iOcrPreview').style.display = 'none';
 
   try {
@@ -4459,7 +4471,7 @@ async function processOcrFile(file) {
   if (!allowed.includes(file.type)) { showOcrStatus('error','❌ Format tidak didukung. Gunakan JPG, PNG, atau PDF.'); return; }
   if (file.size > 20*1024*1024) { showOcrStatus('error','❌ File terlalu besar (maks 20 MB).'); return; }
 
-  showOcrStatus('loading','🔄 Membaca dokumen dengan Gemini AI... mohon tunggu.');
+  showOcrStatus('loading','🔄 Membaca dokumen dengan Mistral AI... mohon tunggu.');
   document.getElementById('ocrPreview').style.display = 'none';
 
   try {
