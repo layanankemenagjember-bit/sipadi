@@ -1,25 +1,22 @@
 {
-  "rewrites": [
+  "cleanUrls": false,
+  "trailingSlash": false,
+  "routes": [
     {
-      "source": "/((?!sipadi_app\\.v2\\.js$).*)",
-      "destination": "/sipadi_cloudflare.html"
-    }
-  ],
-  "headers": [
-    {
-      "source": "/sipadi_app.v2.js",
-      "headers": [
-        { "key": "Cache-Control", "value": "no-store" }
-      ]
+      "src": "/sipadi_app\\.v2\\.js",
+      "dest": "/sipadi_app.v2.js",
+      "headers": { "Cache-Control": "no-store" }
     },
     {
-      "source": "/(.*)",
-      "headers": [
-        {
-          "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://unpkg.com https://cdn.jsdelivr.net https://vercel.live; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://sipadi-worker.kemenagjember.workers.dev https://pub-cb38c139fc6248b0a2cd34173379ba58.r2.dev https://unpkg.com https://cdn.jsdelivr.net; img-src 'self' data: blob: https://dki.kemenag.go.id; worker-src blob:; frame-src https://vercel.live;"
-        }
-      ]
+      "src": "/(.*\\.(js|css|png|ico|svg|woff2?))",
+      "dest": "/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/sipadi_cloudflare.html",
+      "headers": {
+        "Content-Security-Policy": "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://unpkg.com https://cdn.jsdelivr.net https://vercel.live; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://sipadi-worker.kemenagjember.workers.dev https://pub-cb38c139fc6248b0a2cd34173379ba58.r2.dev https://unpkg.com https://cdn.jsdelivr.net; img-src 'self' data: blob: https://dki.kemenag.go.id; worker-src blob:; frame-src https://vercel.live;"
+      }
     }
   ]
 }
