@@ -2726,13 +2726,61 @@ async function doOcrWithTesseract(file, onProgress) {
     mimeType = file.type;
   } else if (isPdf) {
     if (!window.pdfjsLib) throw new Error('PDF.js belum siap. Coba lagi sesaat.');
-    base64 = await pdfPageToBase64(file, 1); // halaman pertama dulu
-    mimeType = 'image/jpeg';
+    // PDF: scan sampai 4 halaman, merge hasilnya
+    const _arrayBuf = await file.arrayBuffer();
+    const _pdf = await window.pdfjsLib.getDocument({ data: _arrayBuf }).promise;
+    const _maxPages = Math.min(_pdf.numPages, 4);
+    const _fn = file.name.toLowerCase();
+    const _isIjazah = _fn.includes('ijazah') || _fn.includes('skhun');
+
+    // Kumpulkan teks dari semua halaman dulu
+    let _allTexts = [];
+    for (let _p = 1; _p <= _maxPages; _p++) {
+      if (onProgress) onProgress(Math.round(10 + (_p/_maxPages)*40));
+      const _pageBase64 = await pdfPageToBase64(file, _p);
+      // Tentukan prompt sesuai jenis dokumen (akan dibuat di bawah)
+      _allTexts.push({ base64: _pageBase64, page: _p });
+    }
+
+    if (onProgress) onProgress(50);
+
+    // Buat prompt
+    const _pNikah = `Ini adalah scan halaman AKTA NIKAH Indonesia dari KUA.
+Ekstrak semua data yang ada di halaman ini dan kembalikan HANYA JSON ini:
+{"no_akta":"","no_pmrk":"","tgl_nikah":"YYYY-MM-DD","nama_suami":"","nik_suami":"","ttl_suami":"","pekerjaan_suami":"","alamat_suami":"","nama_istri":"","nik_istri":"","ttl_istri":"","pekerjaan_istri":"","alamat_istri":"","nama_wali":"","kua":"","tempat_akad":""}
+Isi hanya field yang ada di halaman ini. Field yang tidak ada biarkan "". HANYA JSON.`;
+
+    const _pIjazah = `Ini adalah scan halaman IJAZAH MADRASAH Indonesia.
+Ekstrak semua data dan kembalikan HANYA JSON ini:
+{"no_ijazah":"","no_seri":"","nama_siswa":"","ttl":"","nisn":"","madrasah":"","jenjang":"","jurusan":"","tahun_lulus":"","nilai_rata":"","kepala_madrasah":""}
+Isi hanya field yang ada. HANYA JSON.`;
+
+    const _promptUsed = _isIjazah ? _pIjazah : _pNikah;
+
+    // Kirim setiap halaman dan merge hasilnya
+    let _merged = {};
+    for (const _page of _allTexts) {
+      try {
+        const _resp = await mistralOcr(_page.base64, 'image/jpeg', _promptUsed);
+        const _clean = _resp.replace(/```json[\n]?/g,'').replace(/```[\n]?/g,'').trim();
+        const _json = JSON.parse(_clean);
+        for (const [k, v] of Object.entries(_json)) {
+          if (v && v.trim() && !_merged[k]) _merged[k] = v.trim();
+        }
+      } catch(e) { console.warn('Page', _page.page, 'parse error:', e.message); }
+    }
+
+    if (onProgress) onProgress(90);
+
+    // Format output
+    const _lines = Object.entries(_merged).filter(([,v])=>v).map(([k,v])=>`${k}: ${v}`);
+    _lines.push('_json:' + JSON.stringify(_merged));
+    return _lines.join('\n');
   }
 
   if (onProgress) onProgress(40);
 
-  // Prompt NIKAH — terstruktur, minta JSON langsung
+  // Untuk gambar tunggal: prompt — terstruktur, minta JSON langsung
   const promptNikah = `Ini adalah scan dokumen BUKU NIKAH atau AKTA NIKAH Indonesia dari KUA (Kantor Urusan Agama).
 Ekstrak informasi berikut dan kembalikan HANYA dalam format JSON tanpa penjelasan apapun:
 
@@ -2786,9 +2834,8 @@ Jika tidak ditemukan, isi dengan "". HANYA kembalikan JSON.`;
   const rawResponse = await mistralOcr(base64, mimeType, promptToUse);
   if (onProgress) onProgress(90);
 
-  // Coba parse JSON response
+  // Coba parse JSON response dari gambar tunggal
   try {
-    // Bersihkan dari markdown code block jika ada
     const cleaned = rawResponse.replace(/```json\n?/g,'').replace(/```\n?/g,'').trim();
     const parsed = JSON.parse(cleaned);
     // Konversi ke format teks yang bisa diparse oleh parseNikahText/parseIjazahText
@@ -2841,7 +2888,8 @@ Jika tidak ditemukan, isi dengan "". HANYA kembalikan JSON.`;
 // ══════════════════════════════════════════════════════
 
 function parseNikahText(raw) {
-  const t = raw.replace(/\r\n/g,'\n');
+  // Hapus baris _json agar tidak ikut diparsed
+  const t = raw.replace(/^_json:.*$/m, '').replace(/\r\n/g,'\n');
   const g = (patterns) => {
     for (const p of patterns) {
       const m = t.match(p);
@@ -2880,7 +2928,7 @@ function parseNikahText(raw) {
 }
 
 function parseIjazahText(raw) {
-  const t = raw.replace(/\r\n/g,'\n');
+  const t = raw.replace(/^_json:.*$/m, '').replace(/\r\n/g,'\n');
   const g = (patterns) => {
     for (const p of patterns) {
       const m = t.match(p);
@@ -4440,12 +4488,25 @@ function renderIjazahPreview(d) {
   const grid = document.getElementById('iOcrGrid');
   const prev = document.getElementById('iOcrPreview');
   if (!grid || !prev) return;
+  
+  let j = {};
+  if (d._rawText) {
+    const lines = d._rawText.split('\n');
+    const jLine = lines.find(l => l.startsWith('_json:'));
+    if (jLine) { try { j = JSON.parse(jLine.replace('_json:','')); } catch(e) {} }
+  }
+  
   const fields = [
-    ['📄 No. Ijazah', d.noIjazah], ['📅 Tahun Lulus', d.tahunLulus],
-    ['👤 Nama Siswa', d.namaSiswa], ['📍 Tempat Lahir', d.ttl],
-    ['🔢 NISN',       d.nisn],      ['🏫 Madrasah',    d.madrasah],
-    ['🎓 Jenjang',   d.jenjang],   ['📚 Jurusan',      d.jurusan],
-    ['📊 Nilai',      d.nilaiRataRata],
+    ['📄 No. Ijazah',  j.no_ijazah   || d.noIjazah],
+    ['📅 Tahun Lulus', j.tahun_lulus || d.tahunLulus],
+    ['👤 Nama Siswa',  j.nama_siswa  || d.namaSiswa],
+    ['📍 Tempat Lahir',j.ttl         || d.ttl],
+    ['🔢 NISN',        j.nisn        || d.nisn],
+    ['🏫 Madrasah',    j.madrasah    || d.madrasah],
+    ['🎓 Jenjang',     j.jenjang     || d.jenjang],
+    ['📚 Jurusan',     j.jurusan     || d.jurusan],
+    ['📊 Nilai',       j.nilai_rata  || d.nilaiRataRata],
+    ['👨‍🏫 Kepala',     j.kepala_madrasah||''],
   ];
   grid.innerHTML = fields.map(([lbl, val]) => `
     <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:10px 13px">
@@ -4633,23 +4694,33 @@ function renderOcrPreview(data) {
   const prev = document.getElementById('ocrPreview');
   if (!grid || !prev) return;
 
+  // Ambil dari _json jika ada (hasil Mistral structured)
+  let j = {};
+  if (data._rawText) {
+    const lines = data._rawText.split('\n');
+    const jLine = lines.find(l => l.startsWith('_json:'));
+    if (jLine) {
+      try { j = JSON.parse(jLine.replace('_json:','')); } catch(e) {}
+    }
+  }
+
   const fields = [
-    ['📄 No. Akta',       data.noAkta],
-    ['🔢 No. Pemeriksaan',data.noPmrk],
-    ['📅 Tanggal Nikah',  data.tglNikah],
-    ['🤵 Nama Suami',     data.namaSuami],
-    ['🪪 NIK Suami',      data.nikSuami],
-    ['📍 Lahir Suami',    data.ttlSuami],
-    ['💼 Pekerjaan Suami',data.pekerjaanSuami],
-    ['🏠 Alamat Suami',   data.alamatSuami],
-    ['👰 Nama Istri',     data.namaIstri],
-    ['🪪 NIK Istri',      data.nikIstri],
-    ['📍 Lahir Istri',    data.ttlIstri],
-    ['💼 Pekerjaan Istri',data.pekerjaanIstri],
-    ['🏠 Alamat Istri',   data.alamatIstri],
-    ['🕌 KUA',            data.kua],
-    ['📍 Tempat Akad',    data.tempatAkad],
-    ['👤 Wali Nikah',     data.namaWali],
+    ['📄 No. Akta',        j.no_akta       || data.noAkta],
+    ['🔢 No. Pemeriksaan', j.no_pmrk       || data.noPmrk],
+    ['📅 Tanggal Nikah',   j.tgl_nikah     || data.tglNikah],
+    ['🤵 Nama Suami',      j.nama_suami    || data.namaSuami],
+    ['🪪 NIK Suami',       j.nik_suami     || data.nikSuami],
+    ['📍 Lahir Suami',     j.ttl_suami     || data.ttlSuami],
+    ['💼 Pekerjaan Suami', j.pekerjaan_suami || data.pekerjaanSuami],
+    ['🏠 Alamat Suami',    j.alamat_suami  || data.alamatSuami],
+    ['👰 Nama Istri',      j.nama_istri    || data.namaIstri],
+    ['🪪 NIK Istri',       j.nik_istri     || data.nikIstri],
+    ['📍 Lahir Istri',     j.ttl_istri     || data.ttlIstri],
+    ['💼 Pekerjaan Istri', j.pekerjaan_istri || data.pekerjaanIstri],
+    ['🏠 Alamat Istri',    j.alamat_istri  || data.alamatIstri],
+    ['🕌 KUA',             j.kua           || data.kua],
+    ['📍 Tempat Akad',     j.tempat_akad   || data.tempatAkad],
+    ['👤 Wali Nikah',      j.nama_wali     || data.namaWali],
   ];
 
   grid.innerHTML = fields.map(([label, val]) => `
