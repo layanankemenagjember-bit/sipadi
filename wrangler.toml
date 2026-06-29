@@ -1,0 +1,24 @@
+name       = "sipadi-worker"
+main       = "worker.js"
+compatibility_date = "2024-01-01"
+compatibility_flags = ["nodejs_compat"]
+
+# ── D1 Database ───────────────────────────────────────────────
+[[d1_databases]]
+binding      = "DB"
+database_name = "sipadi-db"
+database_id  = "fcb81b3b-6c05-4561-ade9-8285c31f4d7f"
+# Cara dapat database_id:
+#   wrangler d1 create sipadi-db
+#   Salin "database_id" dari output ke sini
+
+# ── R2 Bucket ────────────────────────────────────────────────
+[[r2_buckets]]
+binding     = "R2"
+bucket_name = "sipadi-arsip"
+# Buat bucket dulu: wrangler r2 bucket create sipadi-arsip
+
+# ── Environment variables ─────────────────────────────────────
+[vars]
+R2_PUBLIC_URL = "https://pub-cb38c139fc6248b0a2cd34173379ba58.r2.dev"
+# Ganti dengan URL publik bucket R2 Anda setelah aktifkan public access

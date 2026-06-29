@@ -1,0 +1,17 @@
+{
+  "name": "sipadi-worker",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev":    "wrangler dev",
+    "deploy": "wrangler deploy",
+    "db:init": "wrangler d1 execute sipadi-db --file=schema.sql",
+    "db:seed": "wrangler d1 execute sipadi-db --file=seed_satker.sql && wrangler d1 execute sipadi-db --file=seed_users.sql"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3"
+  },
+  "devDependencies": {
+    "wrangler": "^3.0.0"
+  }
+}
