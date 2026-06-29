@@ -2393,57 +2393,23 @@ function initTheme(){
 
 
 // ── Expose semua fungsi ke global window (fix untuk Vercel) ──
-if(typeof addRiwayat!=='undefined') window.addRiwayat=addRiwayat;
-if(typeof applyIjazahOcr!=='undefined') window.applyIjazahOcr=applyIjazahOcr;
-if(typeof applyOcrToForm!=='undefined') window.applyOcrToForm=applyOcrToForm;
-if(typeof clearIjazahOcr!=='undefined') window.clearIjazahOcr=clearIjazahOcr;
-if(typeof clearOcr!=='undefined') window.clearOcr=clearOcr;
-if(typeof closeM!=='undefined') window.closeM=closeM;
-if(typeof dlI!=='undefined') window.dlI=dlI;
-if(typeof dlKp!=='undefined') window.dlKp=dlKp;
-if(typeof dlN!=='undefined') window.dlN=dlN;
-if(typeof dlO!=='undefined') window.dlO=dlO;
-if(typeof dlRiwayat!=='undefined') window.dlRiwayat=dlRiwayat;
-if(typeof doLogin!=='undefined') window.doLogin=doLogin;
-if(typeof doLogout!=='undefined') window.doLogout=doLogout;
-if(typeof doPrint!=='undefined') window.doPrint=doPrint;
-if(typeof downloadWatermarked!=='undefined') window.downloadWatermarked=downloadWatermarked;
-if(typeof downloadWatermarkedI!=='undefined') window.downloadWatermarkedI=downloadWatermarkedI;
-if(typeof edI!=='undefined') window.edI=edI;
-if(typeof edKp!=='undefined') window.edKp=edKp;
-if(typeof edN!=='undefined') window.edN=edN;
-if(typeof edO!=='undefined') window.edO=edO;
-if(typeof editSk!=='undefined') window.editSk=editSk;
-if(typeof exportAll!=='undefined') window.exportAll=exportAll;
-if(typeof exportCSV!=='undefined') window.exportCSV=exportCSV;
-if(typeof exportJSON!=='undefined') window.exportJSON=exportJSON;
-if(typeof fI!=='undefined') window.fI=fI;
-if(typeof fN!=='undefined') window.fN=fN;
-if(typeof fO!=='undefined') window.fO=fO;
-if(typeof gTab!=='undefined') window.gTab=gTab;
-if(typeof handleIjazahDrop!=='undefined') window.handleIjazahDrop=handleIjazahDrop;
-if(typeof handleIjazahFile!=='undefined') window.handleIjazahFile=handleIjazahFile;
-if(typeof handleOcrDrop!=='undefined') window.handleOcrDrop=handleOcrDrop;
-if(typeof handleOcrFile!=='undefined') window.handleOcrFile=handleOcrFile;
-if(typeof impScan!=='undefined') window.impScan=impScan;
-if(typeof kpSwitchTab!=='undefined') window.kpSwitchTab=kpSwitchTab;
-if(typeof loadAuditLog!=='undefined') window.loadAuditLog=loadAuditLog;
-if(typeof nav!=='undefined') window.nav=nav;
-if(typeof openM!=='undefined') window.openM=openM;
-if(typeof procF!=='undefined') window.procF=procF;
-if(typeof pvI!=='undefined') window.pvI=pvI;
-if(typeof pvKp!=='undefined') window.pvKp=pvKp;
-if(typeof pvN!=='undefined') window.pvN=pvN;
-if(typeof renderKp!=='undefined') window.renderKp=renderKp;
-if(typeof saveI!=='undefined') window.saveI=saveI;
-if(typeof saveKp!=='undefined') window.saveKp=saveKp;
-if(typeof saveN!=='undefined') window.saveN=saveN;
-if(typeof saveO!=='undefined') window.saveO=saveO;
-if(typeof saveSk!=='undefined') window.saveSk=saveSk;
-if(typeof scT!=='undefined') window.scT=scT;
-if(typeof stT!=='undefined') window.stT=stT;
-if(typeof switchIjazahTab!=='undefined') window.switchIjazahTab=switchIjazahTab;
-if(typeof switchNikahTab!=='undefined') window.switchNikahTab=switchNikahTab;
-if(typeof togglePw!=='undefined') window.togglePw=togglePw;
-if(typeof verD!=='undefined') window.verD=verD;
-
+// ══ FORCE GLOBAL REGISTRATION ══
+// Assign all functions to window explicitly, no typeof guard
+setTimeout(function() {
+  var fns = [
+    'addRiwayat','applyIjazahOcr','applyOcrToForm','clearIjazahOcr','clearOcr',
+    'closeM','dlI','dlKp','dlN','dlO','dlRiwayat','doLogin','doLogout','doPrint',
+    'downloadWatermarked','downloadWatermarkedI','edI','edKp','edN','edO','editSk',
+    'exportAll','exportCSV','exportJSON','fI','fN','fO','gTab',
+    'handleIjazahDrop','handleIjazahFile','handleOcrDrop','handleOcrFile',
+    'impScan','kpSwitchTab','loadAuditLog','nav','openM','procF',
+    'pvI','pvKp','pvN','renderKp','saveI','saveKp','saveN','saveO','saveSk',
+    'scT','stT','switchIjazahTab','switchNikahTab','togglePw','verD'
+  ];
+  fns.forEach(function(name) {
+    try {
+      var fn = eval(name);
+      if (typeof fn === 'function') window[name] = fn;
+    } catch(e) {}
+  });
+}, 0);
