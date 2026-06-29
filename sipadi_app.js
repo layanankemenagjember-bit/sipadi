@@ -366,21 +366,6 @@ function setLoginLoading(on, msg){
   btn.style.opacity = on ? '.75' : '1';
 }
 
-// checkSession — auto-login jika token masih valid
-async function checkSession(){
-  const saved = localStorage.getItem('sipadi_token');
-  if(!saved) return;
-  _token = saved;
-  try {
-    const data = await api('GET', '/auth/me');
-    const u = data.user;
-    pL(u.nama, u.email, u.role, u.satker);
-  } catch(e) {
-    // Token expired atau invalid — reset
-    _token = null;
-    localStorage.removeItem('sipadi_token');
-  }
-}
 
 function pL(nm, em, role, satker){
   S.role    = role;
