@@ -2686,27 +2686,22 @@ async function pdfPageToBase64(file, pageNum) {
   return canvas.toDataURL('image/jpeg', 0.92).split(',')[1];
 }
 
-async function mistralOcr(base64, mimeType, prompt) {
+async function mistralOcr(base64, mimeType, promptText) {
   const body = {
     model: 'pixtral-12b-2409',
     messages: [{
       role: 'user',
       content: [
-        {
-          type: 'image_url',
-          image_url: { url: `data:${mimeType};base64,${base64}` }
-        },
-        { type: 'text', text: prompt }
+        { type: 'image_url', image_url: { url: `data:${mimeType};base64,${base64}` } },
+        { type: 'text', text: promptText }
       ]
     }],
-    max_tokens: 4096
+    max_tokens: 4096,
+    temperature: 0.1
   };
   const res = await fetch(MISTRAL_URL, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${MISTRAL_KEY}`
-    },
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${MISTRAL_KEY}` },
     body: JSON.stringify(body)
   });
   if (!res.ok) {
@@ -2722,37 +2717,122 @@ async function doOcrWithTesseract(file, onProgress) {
   const isPdf   = file.type === 'application/pdf';
   if (!isImage && !isPdf) throw new Error('Format tidak didukung. Gunakan JPG, PNG, atau PDF.');
 
-  const prompt = `Ekstrak SEMUA teks yang ada dalam dokumen ini secara lengkap dan akurat.
-Pertahankan format asli, termasuk baris baru, spasi, dan tanda baca.
-Jangan tambahkan interpretasi atau penjelasan — hanya teks mentah dari dokumen.
-Jika ada tabel, ekstrak baris per baris dengan pemisah yang jelas.`;
+  if (onProgress) onProgress(20);
 
-  if (onProgress) onProgress(10);
-
-  let rawText = '';
+  let base64, mimeType = 'image/jpeg';
 
   if (isImage) {
-    const base64 = await fileToBase64(file);
-    if (onProgress) onProgress(40);
-    rawText = await mistralOcr(base64, file.type, prompt);
-    if (onProgress) onProgress(100);
-
+    base64 = await fileToBase64(file);
+    mimeType = file.type;
   } else if (isPdf) {
     if (!window.pdfjsLib) throw new Error('PDF.js belum siap. Coba lagi sesaat.');
-    const arrayBuf = await file.arrayBuffer();
-    const pdf = await window.pdfjsLib.getDocument({ data: arrayBuf }).promise;
-    const maxPages = Math.min(pdf.numPages, 4);
-
-    for (let p = 1; p <= maxPages; p++) {
-      if (onProgress) onProgress(Math.round(10 + (p-1)/maxPages * 80));
-      const base64 = await pdfPageToBase64(file, p);
-      const text = await mistralOcr(base64, 'image/jpeg', prompt);
-      rawText += text + '\n';
-    }
-    if (onProgress) onProgress(100);
+    base64 = await pdfPageToBase64(file, 1); // halaman pertama dulu
+    mimeType = 'image/jpeg';
   }
 
-  return rawText.trim();
+  if (onProgress) onProgress(40);
+
+  // Prompt NIKAH — terstruktur, minta JSON langsung
+  const promptNikah = `Ini adalah scan dokumen BUKU NIKAH atau AKTA NIKAH Indonesia dari KUA (Kantor Urusan Agama).
+Ekstrak informasi berikut dan kembalikan HANYA dalam format JSON tanpa penjelasan apapun:
+
+{
+  "no_akta": "nomor akta nikah (contoh: 3509171012025001 atau 001/KUA-Ajung/2024)",
+  "no_pmrk": "nomor pemeriksaan nikah (contoh: NP0028350917112024)",
+  "tgl_nikah": "tanggal akad nikah format YYYY-MM-DD",
+  "nama_suami": "nama lengkap suami/laki-laki",
+  "nik_suami": "NIK 16 digit suami",
+  "ttl_suami": "tempat tanggal lahir suami (contoh: Jember, 10 Januari 1990)",
+  "pekerjaan_suami": "pekerjaan suami",
+  "alamat_suami": "alamat suami",
+  "nama_istri": "nama lengkap istri/perempuan",
+  "nik_istri": "NIK 16 digit istri",
+  "ttl_istri": "tempat tanggal lahir istri",
+  "pekerjaan_istri": "pekerjaan istri",
+  "alamat_istri": "alamat istri",
+  "nama_wali": "nama wali nikah",
+  "kua": "nama kecamatan KUA (contoh: Ajung, Sumbersari)",
+  "tempat_akad": "tempat akad nikah dilangsungkan"
+}
+
+Jika suatu field tidak ditemukan, isi dengan string kosong "". HANYA kembalikan JSON, tidak ada teks lain.`;
+
+  // Prompt IJAZAH — terstruktur
+  const promptIjazah = `Ini adalah scan IJAZAH MADRASAH Indonesia (MI/MTs/MA Negeri).
+Ekstrak informasi berikut dan kembalikan HANYA dalam format JSON tanpa penjelasan apapun:
+
+{
+  "no_ijazah": "nomor ijazah",
+  "no_seri": "nomor seri ijazah",
+  "nama_siswa": "nama lengkap siswa",
+  "ttl": "tempat, tanggal lahir siswa",
+  "nisn": "NISN 10 digit",
+  "madrasah": "nama madrasah (contoh: MAN 1 Jember, MTsN 2 Jember)",
+  "jenjang": "MI atau MTs atau MA",
+  "jurusan": "jurusan/program studi jika ada",
+  "tahun_lulus": "tahun lulus 4 digit",
+  "nilai_rata": "nilai rata-rata jika ada",
+  "kepala_madrasah": "nama kepala madrasah yang tanda tangan"
+}
+
+Jika tidak ditemukan, isi dengan "". HANYA kembalikan JSON.`;
+
+  // Deteksi jenis dokumen dari nama file
+  const fn = file.name.toLowerCase();
+  const isIjazah = fn.includes('ijazah') || fn.includes('skhun');
+  const promptToUse = isIjazah ? promptIjazah : promptNikah;
+
+  if (onProgress) onProgress(60);
+  const rawResponse = await mistralOcr(base64, mimeType, promptToUse);
+  if (onProgress) onProgress(90);
+
+  // Coba parse JSON response
+  try {
+    // Bersihkan dari markdown code block jika ada
+    const cleaned = rawResponse.replace(/```json\n?/g,'').replace(/```\n?/g,'').trim();
+    const parsed = JSON.parse(cleaned);
+    // Konversi ke format teks yang bisa diparse oleh parseNikahText/parseIjazahText
+    if (isIjazah) {
+      return [
+        `nomor ijazah: ${parsed.no_ijazah||''}`,
+        `nomor seri: ${parsed.no_seri||''}`,
+        `nama siswa: ${parsed.nama_siswa||''}`,
+        `tempat tanggal lahir: ${parsed.ttl||''}`,
+        `nisn: ${parsed.nisn||''}`,
+        `madrasah: ${parsed.madrasah||''}`,
+        `jenjang: ${parsed.jenjang||''}`,
+        `jurusan: ${parsed.jurusan||''}`,
+        `tahun pelajaran: ${parsed.tahun_lulus||''}`,
+        `nilai rata-rata: ${parsed.nilai_rata||''}`,
+        `kepala madrasah: ${parsed.kepala_madrasah||''}`,
+        `_json:${JSON.stringify(parsed)}` // simpan json asli untuk direct use
+      ].join('\n');
+    } else {
+      return [
+        `nomor akta: ${parsed.no_akta||''}`,
+        `nomor pemeriksaan: ${parsed.no_pmrk||''}`,
+        `tanggal: ${parsed.tgl_nikah||''}`,
+        `nama suami: ${parsed.nama_suami||''}`,
+        `nik suami: ${parsed.nik_suami||''}`,
+        `tempat lahir suami: ${parsed.ttl_suami||''}`,
+        `pekerjaan suami: ${parsed.pekerjaan_suami||''}`,
+        `alamat suami: ${parsed.alamat_suami||''}`,
+        `nama istri: ${parsed.nama_istri||''}`,
+        `nik istri: ${parsed.nik_istri||''}`,
+        `tempat lahir istri: ${parsed.ttl_istri||''}`,
+        `pekerjaan istri: ${parsed.pekerjaan_istri||''}`,
+        `alamat istri: ${parsed.alamat_istri||''}`,
+        `nama wali: ${parsed.nama_wali||''}`,
+        `kua kecamatan: ${parsed.kua||''}`,
+        `tempat akad: ${parsed.tempat_akad||''}`,
+        `_json:${JSON.stringify(parsed)}` // simpan json asli
+      ].join('\n');
+    }
+  } catch(e) {
+    // Jika bukan JSON valid, kembalikan raw text apa adanya
+    console.warn('Mistral tidak return JSON, pakai raw text:', e.message);
+    return rawResponse;
+  }
 }
 
 // ══════════════════════════════════════════════════════
@@ -4378,6 +4458,35 @@ function renderIjazahPreview(d) {
 function applyIjazahOcr() {
   if (!ocrIjazahData) return;
   const d = ocrIjazahData;
+  
+  if (d._rawText && d._rawText.includes('_json:')) {
+    try {
+      const jsonLine = d._rawText.split('\n').find(l => l.startsWith('_json:'));
+      const jsonData = JSON.parse(jsonLine.replace('_json:',''));
+      const set = (id, val) => { const el = document.getElementById(id); if (el) el.value = val||''; };
+      set('iNo',    jsonData.no_ijazah);
+      set('iSeri',  jsonData.no_seri);
+      set('iNm',    jsonData.nama_siswa);
+      set('iTtl',   jsonData.ttl);
+      set('iNisn',  jsonData.nisn);
+      set('iThn',   jsonData.tahun_lulus);
+      set('iJur',   jsonData.jurusan);
+      set('iNilai', jsonData.nilai_rata);
+      set('iKepala',jsonData.kepala_madrasah);
+      const sel = document.getElementById('iMad');
+      if (sel && jsonData.madrasah) {
+        for (let i = 0; i < sel.options.length; i++) {
+          if (sel.options[i].value.toLowerCase().includes(jsonData.madrasah.toLowerCase().slice(0,6))) {
+            sel.selectedIndex = i; break;
+          }
+        }
+      }
+      const lbl = document.getElementById('iFormLabel');
+      if (lbl) lbl.textContent = '✅ Data dari Mistral AI — Koreksi jika perlu';
+      switchIjazahTab('manual');
+      return;
+    } catch(e) { console.warn('JSON parse failed:', e); }
+  }
   const set = (id, val) => { const el = document.getElementById(id); if (el) el.value = val||''; };
   set('iNo',    d.noIjazah);
   set('iThn',   d.tahunLulus);
@@ -4556,6 +4665,43 @@ function renderOcrPreview(data) {
 function applyOcrToForm() {
   if (!ocrRawData) return;
   const d = ocrRawData;
+  
+  // Cek apakah ada _json dari Mistral structured response
+  if (d._rawText && d._rawText.includes('_json:')) {
+    try {
+      const jsonLine = d._rawText.split('\n').find(l => l.startsWith('_json:'));
+      const jsonData = JSON.parse(jsonLine.replace('_json:',''));
+      // Mapping langsung dari JSON Mistral ke field form
+      const set = (id, val) => { const el = document.getElementById(id); if (el) el.value = val||''; };
+      set('nNA',       jsonData.no_akta);
+      set('nNP',       jsonData.no_pmrk);
+      set('nTgl',      jsonData.tgl_nikah);
+      set('nSm',       jsonData.nama_suami);
+      set('nSmNik',    jsonData.nik_suami);
+      set('nSmTtl',    jsonData.ttl_suami);
+      set('nSmPek',    jsonData.pekerjaan_suami);
+      set('nSmAlamat', jsonData.alamat_suami);
+      set('nSt',       jsonData.nama_istri);
+      set('nStNik',    jsonData.nik_istri);
+      set('nStTtl',    jsonData.ttl_istri);
+      set('nStPek',    jsonData.pekerjaan_istri);
+      set('nStAlamat', jsonData.alamat_istri);
+      set('nTmp',      jsonData.tempat_akad);
+      set('nWali',     jsonData.nama_wali);
+      const kuaSel = document.getElementById('nKua');
+      if (kuaSel && jsonData.kua) {
+        for (let i = 0; i < kuaSel.options.length; i++) {
+          if (kuaSel.options[i].value.toLowerCase().includes(jsonData.kua.toLowerCase())) {
+            kuaSel.selectedIndex = i; break;
+          }
+        }
+      }
+      const lbl = document.getElementById('formModeLabel');
+      if (lbl) lbl.textContent = '✅ Data dari Mistral AI — Koreksi jika perlu';
+      switchNikahTab('manual');
+      return;
+    } catch(e) { console.warn('JSON parse failed, fallback to regex:', e); }
+  }
 
   // Isi semua field form
   const set = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
