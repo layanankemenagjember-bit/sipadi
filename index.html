@@ -618,7 +618,7 @@ select.fc{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:18px}
 .mb-24{margin-bottom:24px}
 
-/* ═══════════════════════════════ FIREBASE & NETLIFY GUIDE ═══════════════════════════════ */
+/* ═══════════════════════════════ DEPLOY GUIDE (WORKER + NETLIFY) ═══════════════════════════════ */
 .guide-tabs{display:flex;gap:0;border-radius:var(--r2);overflow:hidden;border:1px solid var(--bdr2);margin-bottom:24px}
 .guide-tab{flex:1;padding:14px;background:rgba(255,255,255,.03);border:none;font-family:'Instrument Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;color:var(--cream4);transition:.2s;letter-spacing:.3px;display:flex;align-items:center;justify-content:center;gap:8px}
 .guide-tab:not(:last-child){border-right:1px solid var(--bdr)}
@@ -1632,7 +1632,7 @@ html.light a { color: #2D7A4F !important; }
       <button class="lbtn-main" onclick="doLogin()">MASUK KE SISTEM</button>
 
       <div class="online-indicator" style="margin-top:20px">
-        <span class="dot-live"></span>Sistem aktif · Supabase Auth + PostgreSQL + Storage
+        <span class="dot-live"></span>Sistem aktif · Cloudflare Worker + D1 + R2
       </div>
     </div>
 
@@ -1921,107 +1921,88 @@ html.light a { color: #2D7A4F !important; }
       <!-- PANDUAN DEPLOY -->
       <div class="page" id="pGuide">
         <div class="guide-tabs">
-          <button class="guide-tab active" onclick="gTab('firebase',this)">🟢 Supabase + R2 (Backend)</button>
+          <button class="guide-tab active" onclick="gTab('firebase',this)">🟠 Cloudflare Worker + D1 + R2 (Backend)</button>
           <button class="guide-tab netlify" onclick="gTab('netlify',this)">🌐 Netlify (Hosting)</button>
         </div>
 
-        <!-- FIREBASE GUIDE -->
+        <!-- CLOUDFLARE WORKER GUIDE -->
         <div id="gFirebase">
-          <div class="alert alert-warn mb-24">⚠️ Panduan teknis untuk developer. Pastikan memiliki akun Google, akun Firebase, dan Node.js terinstal.</div>
+          <div class="alert alert-warn mb-24">⚠️ Panduan teknis untuk developer. Pastikan memiliki akun Cloudflare dan Node.js terinstal (untuk Wrangler CLI).</div>
           <div class="guide-section">
-            <h3><span class="step-badge">1</span> Buat Project Firebase</h3>
-            <div class="step-item"><span class="step-badge" style="width:20px;height:20px;font-size:9px">a</span>Buka <span class="inline-code">console.firebase.google.com</span> → klik <strong style="color:var(--cream)">"Add project"</strong></div>
-            <div class="step-item"><span class="step-badge" style="width:20px;height:20px;font-size:9px">b</span>Nama project: <span class="inline-code">sipadi-kemenag-jember</span> → lanjutkan</div>
-            <div class="step-item"><span class="step-badge" style="width:20px;height:20px;font-size:9px">c</span>Di dashboard → klik ikon <strong style="color:var(--cream)">Web (&lt;/&gt;)</strong> → Register app → salin <span class="inline-code">firebaseConfig</span></div>
+            <h3><span class="step-badge">1</span> Buat Worker, D1, dan R2</h3>
+            <div class="step-item"><span class="step-badge" style="width:20px;height:20px;font-size:9px">a</span>Install Wrangler: <span class="inline-code">npm install -g wrangler</span> lalu <span class="inline-code">wrangler login</span></div>
+            <div class="step-item"><span class="step-badge" style="width:20px;height:20px;font-size:9px">b</span>Buat database D1: <span class="inline-code">wrangler d1 create sipadi-db</span> → salin <span class="inline-code">database_id</span> ke <span class="inline-code">wrangler.toml</span></div>
+            <div class="step-item"><span class="step-badge" style="width:20px;height:20px;font-size:9px">c</span>Buat bucket R2: <span class="inline-code">wrangler r2 bucket create sipadi-arsip</span> → aktifkan akses publik via <span class="inline-code">r2.dev</span> atau custom domain</div>
           </div>
           <div class="guide-section">
-            <h3><span class="step-badge">2</span> Aktifkan Layanan Firebase</h3>
-            <div class="step-item"><span class="step-badge" style="width:20px;height:20px;font-size:9px">a</span><strong style="color:var(--cream)">Authentication:</strong> Sign-in method → aktifkan Google + Email/Password</div>
-            <div class="step-item"><span class="step-badge" style="width:20px;height:20px;font-size:9px">b</span><strong style="color:var(--cream)">Firestore:</strong> Create database → Production mode → Region: <span class="inline-code">asia-southeast2</span> (Jakarta)</div>
-            <div class="step-item"><span class="step-badge" style="width:20px;height:20px;font-size:9px">c</span><strong style="color:var(--cream)">Storage:</strong> Get Started → region sama → struktur folder: <span class="inline-code">nikah/ ijazah/ temp/</span></div>
+            <h3><span class="step-badge">2</span> Skema Tabel D1</h3>
+<pre class="code-block" data-lang="SQL">-- wrangler d1 execute sipadi-db --file=schema.sql
+CREATE TABLE users (
+  id TEXT PRIMARY KEY, email TEXT UNIQUE, password_hash TEXT,
+  nama TEXT, role TEXT, satker TEXT, status TEXT DEFAULT 'aktif'
+);
+CREATE TABLE register_nikah (
+  id TEXT PRIMARY KEY, no_akta TEXT, no_pmrk TEXT, tgl_nikah TEXT,
+  nama_suami TEXT, nik_suami TEXT, nama_istri TEXT, nik_istri TEXT,
+  kua TEXT, file_url TEXT, created_by TEXT, created_at TEXT
+);
+CREATE TABLE ijazah (
+  id TEXT PRIMARY KEY, no_ijazah TEXT, nama_siswa TEXT, nisn TEXT,
+  madrasah TEXT, jenjang TEXT, file_url TEXT, created_by TEXT, created_at TEXT
+);
+CREATE TABLE pegawai (
+  id TEXT PRIMARY KEY, nama TEXT, nip TEXT, satker TEXT,
+  jabatan TEXT, status TEXT
+);</pre>
           </div>
           <div class="guide-section">
-            <h3><span class="step-badge">3</span> Inisialisasi SDK</h3>
-<pre class="code-block" data-lang="JAVASCRIPT">// Terminal — install dependencies
-npm install firebase
+            <h3><span class="step-badge">3</span> Endpoint Worker (Auth & CRUD)</h3>
+<pre class="code-block" data-lang="JAVASCRIPT">// src/index.js — Worker utama, route ke D1 + R2
+export default {
+  async fetch(req, env) {
+    const url = new URL(req.url);
 
-// src/firebase.js — konfigurasi utama
-import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
-import { getStorage } from "firebase/storage";
-
-const firebaseConfig = {
-  apiKey:            "AIzaSy...",           // dari Firebase Console
-  authDomain:        "sipadi-kemenag-jember.firebaseapp.com",
-  projectId:         "sipadi-kemenag-jember",
-  storageBucket:     "sipadi-kemenag-jember.appspot.com",
-  messagingSenderId: "123456789",
-  appId:             "1:123456789:web:abc123"
-};
-
-const app = initializeApp(firebaseConfig);
-export const auth           = getAuth(app);
-export const db             = getFirestore(app);
-export const storage        = getStorage(app);
-export const googleProvider = new GoogleAuthProvider();</pre>
-          </div>
-          <div class="guide-section">
-            <h3><span class="step-badge">4</span> Fungsi Auth & CRUD</h3>
-<pre class="code-block" data-lang="JAVASCRIPT">// Login Google
-export async function loginGoogle() {
-  const res     = await signInWithPopup(auth, googleProvider);
-  const userDoc = await getDoc(doc(db, "users", res.user.uid));
-  return { user: res.user, role: userDoc.data()?.role || "viewer" };
-}
-
-// Simpan Register Nikah + hash otomatis
-export async function saveRegisterNikah(data) {
-  const hash = await sha256(JSON.stringify(data));
-  return await addDoc(collection(db, "registerNikah"), {
-    ...data, hash,
-    status:    "terverifikasi",
-    createdAt: serverTimestamp(),
-    createdBy: auth.currentUser.uid
-  });
-}
-
-// SHA-256 native browser (tanpa library tambahan)
-export async function sha256(text) {
-  const buf = await crypto.subtle.digest("SHA-256",
-    new TextEncoder().encode(text));
-  return "sha256:" + [...new Uint8Array(buf)]
-    .map(b => b.toString(16).padStart(2,"0")).join("");
-}</pre>
-          </div>
-          <div class="guide-section">
-            <h3><span class="step-badge">5</span> Security Rules Firestore</h3>
-<pre class="code-block" data-lang="RULES">rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    function isAuth()   { return request.auth != null; }
-    function role()     { return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role; }
-    function satker()   { return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.satker; }
-    function isAdmin()  { return role() == "kabupaten"; }
-
-    match /registerNikah/{id} {
-      allow read: if isAuth();
-      allow create, update: if isAuth() && (isAdmin() ||
-        (role() == "kua" && request.resource.data.kua == satker()));
-      allow delete: if isAdmin();
+    if (url.pathname === '/auth/login' && req.method === 'POST') {
+      const { email, password } = await req.json();
+      const user = await env.DB.prepare(
+        'SELECT * FROM users WHERE email = ?'
+      ).bind(email).first();
+      if (!user || !(await verifyPassword(password, user.password_hash)))
+        return Response.json({ error: 'Email atau password salah' }, { status: 401 });
+      const token = await signToken(user); // JWT sederhana via Web Crypto
+      return Response.json({ token, user: { id: user.id, nama: user.nama, role: user.role, satker: user.satker } });
     }
-    match /ijazah/{id} {
-      allow read: if isAuth();
-      allow create, update: if isAuth() && (isAdmin() ||
-        (role() == "madrasah" && request.resource.data.madrasah == satker()));
-      allow delete: if isAdmin();
+
+    if (url.pathname === '/nikah' && req.method === 'GET') {
+      const auth = await requireAuth(req, env);
+      if (!auth) return Response.json({ error: 'Unauthorized' }, { status: 401 });
+      const { results } = await env.DB.prepare('SELECT * FROM register_nikah').all();
+      return Response.json(results);
     }
-    match /users/{uid} {
-      allow read:  if isAuth();
-      allow write: if isAdmin() || request.auth.uid == uid;
-    }
+
+    // ... endpoint lain: /ijazah, /pegawai, /operators, /verify/:hash, dst.
+    return new Response('Not found', { status: 404 });
   }
+};</pre>
+          </div>
+          <div class="guide-section">
+            <h3><span class="step-badge">4</span> Upload File ke R2</h3>
+<pre class="code-block" data-lang="JAVASCRIPT">// Worker — terima file dan simpan ke R2
+if (url.pathname.startsWith('/upload/') && req.method === 'PUT') {
+  const auth = await requireAuth(req, env);
+  if (!auth) return Response.json({ error: 'Unauthorized' }, { status: 401 });
+  const key = url.pathname.replace('/upload/', '');
+  await env.ARSIP_BUCKET.put(key, req.body, {
+    httpMetadata: { contentType: req.headers.get('Content-Type') || 'application/octet-stream' }
+  });
+  return Response.json({ url: `${env.R2_PUBLIC_URL}/${key}` });
 }</pre>
+          </div>
+          <div class="guide-section">
+            <h3><span class="step-badge">5</span> Deploy Worker</h3>
+            <div class="step-item"><span class="step-badge" style="width:20px;height:20px;font-size:9px">a</span>Bind D1 dan R2 di <span class="inline-code">wrangler.toml</span> (lihat dokumentasi Cloudflare Workers untuk format binding terbaru)</div>
+            <div class="step-item"><span class="step-badge" style="width:20px;height:20px;font-size:9px">b</span>Deploy: <span class="inline-code">wrangler deploy</span> → salin URL Worker ke <span class="inline-code">WORKER_URL</span> di frontend</div>
+            <div class="step-item"><span class="step-badge" style="width:20px;height:20px;font-size:9px">c</span>Set secret produksi (NIK_SECRET, dll) lewat <span class="inline-code">wrangler secret put NAMA_SECRET</span>, jangan hardcode di kode Worker</div>
           </div>
         </div>
 
@@ -2084,21 +2065,20 @@ Publish directory: dist</pre></div></div>
           </div>
 
           <div class="guide-section">
-            <h3><span class="step-badge netlify">⚙</span> Environment Variables (Firebase + Netlify)</h3>
-            <p style="font-size:13px;color:var(--cream4);margin-bottom:14px">Untuk menyimpan konfigurasi Firebase secara aman (jangan hardcode di HTML!):</p>
-            <div class="alert alert-info" style="margin-bottom:14px">📍 Netlify Dashboard → <strong>Site Settings → Environment variables → Add a variable</strong></div>
+            <h3><span class="step-badge netlify">⚙</span> Konfigurasi URL & Secret</h3>
+            <p style="font-size:13px;color:var(--cream4);margin-bottom:14px">Frontend ini satu file HTML statis tanpa proses build, sehingga tidak memakai environment variable Netlify untuk konfigurasi. URL Worker dan R2 di-hardcode langsung di dalam <span class="inline-code">index.html</span> (konstanta <span class="inline-code">WORKER_URL</span> dan <span class="inline-code">R2_URL</span>) — aman karena keduanya memang URL publik, bukan rahasia.</p>
+            <div class="alert alert-warn" style="margin-bottom:14px">⚠️ Rahasia sesungguhnya (Mistral API Key, NIK_SECRET, JWT secret) <strong>tidak boleh</strong> ditaruh di frontend. Simpan di sisi Worker via <span class="inline-code">wrangler secret put NAMA_SECRET</span>, lalu akses lewat <span class="inline-code">env.NAMA_SECRET</span> di kode Worker.</div>
             <table class="env-table">
-              <thead><tr><th>Variable Name</th><th>Value (contoh)</th><th>Keterangan</th></tr></thead>
+              <thead><tr><th>Nilai</th><th>Lokasi</th><th>Keterangan</th></tr></thead>
               <tbody>
-                <tr><td>VITE_FIREBASE_API_KEY</td><td>AIzaSy...</td><td>API Key dari Firebase</td></tr>
-                <tr><td>VITE_FIREBASE_AUTH_DOMAIN</td><td>sipadi.firebaseapp.com</td><td>Auth domain</td></tr>
-                <tr><td>VITE_FIREBASE_PROJECT_ID</td><td>sipadi-kemenag-jember</td><td>Project ID</td></tr>
-                <tr><td>VITE_FIREBASE_STORAGE_BUCKET</td><td>sipadi.appspot.com</td><td>Storage bucket</td></tr>
-                <tr><td>VITE_FIREBASE_MESSAGING_SENDER_ID</td><td>123456789</td><td>Messaging sender</td></tr>
-                <tr><td>VITE_FIREBASE_APP_ID</td><td>1:123...:web:abc</td><td>App ID</td></tr>
+                <tr><td>WORKER_URL</td><td>Frontend (index.html)</td><td>URL publik Cloudflare Worker, aman di-hardcode</td></tr>
+                <tr><td>R2_URL</td><td>Frontend (index.html)</td><td>URL publik bucket R2, aman di-hardcode</td></tr>
+                <tr><td>MISTRAL_API_KEY</td><td>Worker secret</td><td>Jangan pernah taruh di frontend — proxy lewat endpoint Worker</td></tr>
+                <tr><td>NIK_SECRET</td><td>Worker secret (idealnya)</td><td>Kunci enkripsi NIK — ganti dari placeholder sebelum data produksi masuk</td></tr>
               </tbody>
             </table>
           </div>
+
 
           <div class="guide-section">
             <h3><span class="step-badge netlify">📄</span> File netlify.toml (Konfigurasi Lanjutan)</h3>
@@ -2125,7 +2105,7 @@ Publish directory: dist</pre></div></div>
     X-XSS-Protection       = "1; mode=block"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy        = "strict-origin-when-cross-origin"
-    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.firebaseapp.com https://*.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://*.googleapis.com https://*.firebaseio.com wss://*.firebaseio.com;"</pre>
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://sipadi-worker.kemenagjember.workers.dev https://pub-cb38c139fc6248b0a2cd34173379ba58.r2.dev https://api.mistral.ai;"</pre>
           </div>
 
           <div class="guide-section">
@@ -2139,15 +2119,15 @@ Publish directory: dist</pre></div></div>
             <h3><span class="step-badge netlify">✅</span> Checklist Sebelum Go-Live</h3>
             <ul class="check-list">
               <li>File <span class="inline-code">index.html</span> ada di root atau folder publish yang dikonfigurasi</li>
-              <li>Firebase Config menggunakan environment variables (bukan hardcode)</li>
-              <li>Authorized domains di Firebase Auth sudah ditambahkan domain Netlify</li>
-              <li>Security Rules Firestore sudah dipublish (bukan test mode)</li>
-              <li>Storage Rules sudah dikonfigurasi</li>
-              <li>netlify.toml dikonfigurasi (terutama redirects untuk SPA)</li>
-              <li>Environment variables semua terisi di Netlify dashboard</li>
-              <li>Uji coba login Google dari domain Netlify (bukan localhost)</li>
-              <li>Verifikasi operasi CRUD dari domain production</li>
-              <li>Backup data Firestore awal sudah diisi via Firebase Console</li>
+              <li>WORKER_URL dan R2_URL di frontend mengarah ke Worker/bucket produksi (bukan dev)</li>
+              <li>NIK_SECRET sudah diganti dari placeholder sebelum data produksi masuk</li>
+              <li>CORS di Worker mengizinkan origin domain Netlify produksi</li>
+              <li>netlify.toml dikonfigurasi (terutama <span class="inline-code">command = ""</span> dan redirect SPA)</li>
+              <li>Password default semua operator sudah diganti</li>
+              <li>Uji coba login dari domain Netlify produksi (bukan localhost)</li>
+              <li>Verifikasi operasi CRUD (nikah, ijazah, pegawai, operator) dari domain production</li>
+              <li>Endpoint Worker (auth, CRUD, upload R2, verify QR) sudah dites satu per satu</li>
+              <li>Backup awal data D1 sudah dilakukan sebelum distribusi ke 51 satker</li>
             </ul>
           </div>
         </div>
@@ -2638,7 +2618,7 @@ Publish directory: dist</pre></div></div>
     <p style="margin-bottom:12px"><strong style="color:var(--ember3)">📋 Register Nikah</strong> — Input, edit, hapus, dan preview dokumen akta nikah. Hash SHA-256 otomatis + QR Code untuk verifikasi.</p>
     <p style="margin-bottom:12px"><strong style="color:var(--ember3)">🎓 Arsip Ijazah</strong> — MIN 1–6, MTsN 1–11, MAN 1–3. Filter per jenjang dan madrasah.</p>
     <p style="margin-bottom:12px"><strong style="color:var(--ember3)">🛡️ Verifikasi</strong> — Cek keaslian dokumen via hash SHA-256 atau nomor akta/ijazah.</p>
-    <p><strong style="color:var(--ember3)">📚 Panduan Deploy</strong> — Langkah lengkap integrasi Firebase (backend) dan hosting ke <strong>Netlify</strong> (gratis, CI/CD otomatis).</p>
+    <p><strong style="color:var(--ember3)">📚 Panduan Deploy</strong> — Langkah lengkap integrasi Cloudflare Worker + D1 + R2 (backend) dan hosting ke <strong>Netlify</strong> (gratis, CI/CD otomatis).</p>
   </div>
   <div class="modal-footer"><button class="btn btn-jade" onclick="closeM('helpM')">Mengerti</button></div>
 </div></div>
@@ -3002,26 +2982,7 @@ async function api(method, path, body=null, isUpload=false){
   return data;
 }
 
-// sb = null (tidak pakai Supabase)
-const sb = null;
-
-// ═══════════ STATE ═══════════
-// ══════════════════════════════════════════════════════
-// ══════════════════════════════════════════════════════
-// MESIN OCR: TESSERACT.JS
-// ✅ 100% GRATIS SELAMANYA — tanpa API key, tanpa CC, tanpa registrasi
-// ✅ Berjalan di browser — data dokumen TIDAK keluar dari perangkat
-// ✅ Mendukung bahasa Indonesia (Latin) + 100+ bahasa lainnya
-// ✅ Tidak ada batas request per hari/bulan
-// ══════════════════════════════════════════════════════
-
-
-// ══════════════════════════════════════════════════════
-// PARSER TEKS OCR → DATA TERSTRUKTUR
-// Mengekstrak field dari teks mentah hasil OCR
-// ══════════════════════════════════════════════════════
-
-// KONFIGURASI: Supabase sudah tidak dipakai, diganti Cloudflare Worker (lihat WORKER_URL di atas, sb=null)
+// KONFIGURASI: Supabase sudah tidak dipakai, diganti Cloudflare Worker (lihat WORKER_URL di atas)
 
 // ═══════════ STATE ═══════════
 const S={
@@ -3081,7 +3042,7 @@ async function lG(){
 const BF = {
   MAX_ATTEMPTS : 5,
   LOCKOUT_MS   : 15 * 60 * 1000, // 15 menit
-  key          : 'amn_bf',
+  key          : 'sipadi_bf',
   get(){try{return JSON.parse(localStorage.getItem(this.key)||'{}');}catch{return{};}},
   set(d){try{localStorage.setItem(this.key,JSON.stringify(d));}catch{}},
   isLocked(email){
@@ -3470,17 +3431,6 @@ async function saveN(){
         }).catch(e=>console.warn('Upload error:',e));
       }
     }catch(err){ alert('Gagal simpan: '+err.message); return; }
-    if(false){
-      const r={id:id||'N'+Date.now(),noAkta:na,noPmrk:row.no_pmrk,tgl,
-        suami:sm,suamiNik:row.suami_nik,suamiTtl:row.suami_ttl,suamiPek:row.suami_pek,
-        suamiAlamat:alamat,istri:st,istriNik:row.istri_nik,istriTtl:row.istri_ttl,
-        istriPek:row.istri_pek,istriAlamat:alamat,kua,tempat:row.tempat,
-        wali,status:'terverifikasi',hash,fileUrl:null};
-      if(id){const x=S.nikah.findIndex(n=>n.id===id);if(x>=0)S.nikah[x]=r;}
-      else S.nikah.unshift(r);
-      renderN();updD();renderLap();
-      closeM('mNikah');
-    }
   } catch(e) {
     alert('Error saat menyimpan: ' + e.message);
     console.error('saveN error:', e);
@@ -3510,13 +3460,10 @@ function edN(id){
 }
 async function dlN(id){
   if(!confirm('Hapus data register nikah ini?')) return;
-  if(sb){
+  try{
     await api('DELETE',`/nikah/${id}`);
-    
     await loadNikah();
-  } else {
-    S.nikah=S.nikah.filter(x=>x.id!==id);renderN();updD();
-  }
+  }catch(e){ alert('Gagal hapus: '+e.message); }
 }
 function pvN(id){
   const n=S.nikah.find(x=>x.id===id);if(!n)return;
@@ -3802,13 +3749,10 @@ function edI(id){
 }
 async function dlI(id){
   if(!confirm('Hapus data ijazah?')) return;
-  if(sb){
+  try{
     await api('DELETE',`/ijazah/${id}`);
-    if(error){alert('Gagal hapus: '+error.message);return;}
     await loadIjazah();
-  } else {
-    S.ijazah=S.ijazah.filter(x=>x.id!==id);renderI();updD();
-  }
+  }catch(e){ alert('Gagal hapus: '+e.message); }
 }
 function pvI(id){
   const n=S.ijazah.find(x=>x.id===id);if(!n)return;
@@ -4206,7 +4150,7 @@ function downloadFile(content, filename, mime){
   URL.revokeObjectURL(url);
   // Catat waktu backup terakhir
   const ts = new Date().toLocaleString('id-ID');
-  try{ localStorage.setItem('amn_last_backup', ts); }catch{}
+  try{ localStorage.setItem('sipadi_last_backup', ts); }catch{}
   document.getElementById('lastBackup').textContent = ts;
   showToast('✅ File berhasil didownload: '+filename);
 }
@@ -4272,7 +4216,7 @@ function initLapPage(){
   if(card) card.style.display=['kabupaten','admin'].includes(S.role)?'':'none';
   // Tampilkan waktu backup terakhir
   try{
-    const last=localStorage.getItem('amn_last_backup');
+    const last=localStorage.getItem('sipadi_last_backup');
     const el=document.getElementById('lastBackup');
     if(el&&last) el.textContent=last;
   }catch{}
@@ -4582,15 +4526,6 @@ async function processOcrFile(file) {
   }
 }
 
-function fileToBase64(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result.split(',')[1]);
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
-}
-
 function showOcrStatus(type, msg) {
   const el = document.getElementById('ocrStatus');
   if (!el) return;
@@ -4800,28 +4735,10 @@ function closeM(id){
   if (id === 'mIjazah') clearIjazahOcr();
 }
 document.querySelectorAll('.modal-overlay').forEach(m=>{m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open');});
-// Auto-check Supabase session on load
+// Cek sesi login saat halaman dimuat
 initTheme();
 checkSession();});
 
-// ══════════════════════════════════════════════════════
-
-// ══════════════════════════════════════════════════════
-(function warmUpSupabase(){
-  if(!sb) return;
-  // Ping ringan — tidak perlu hasil, cukup membuka koneksi
-  setTimeout(async ()=>{
-    try {
-      await Promise.race([
-        Promise.resolve(),
-        new Promise(r => setTimeout(r, 30000)) // tidak blokir apapun
-      ]);
-      console.info('Supabase warm-up OK');
-    } catch(e) {
-      console.info('Supabase warm-up ping (background):', e.message);
-    }
-  }, 800); // Mulai 0.8 detik setelah halaman terbuka
-})();
 
 
 // ══════════════════════════════════════════════════════
@@ -5023,30 +4940,24 @@ async function saveRiwayat() {
     keterangan:document.getElementById('rwKet').value,
   };
 
-  // Update golongan pegawai juga
+  // Update golongan pegawai juga (riwayat sendiri belum punya endpoint backend — lihat catatan di bawah)
   const px = S.pegawai.findIndex(p=>p.id===pegId);
   if (px>=0) S.pegawai[px].golongan = ke;
 
   try {
     await api('POST','/pegawai',{...S.pegawai.find(p=>p.id===pegId),golongan:ke});
   } catch(e){ console.warn('saveRiwayat api:',e.message); }
-  if (true) {
-    const error = null;
-    if (error) { alert('Gagal simpan: '+error.message); return; }
-    await loadPegawai();
-  } else {
-    S.riwayat.unshift(row);
-    renderRiwayat(); renderKp();
-  }
+
+  // TODO: belum ada endpoint /riwayat di Worker, jadi data riwayat
+  // hanya tersimpan di memori browser dan akan hilang saat refresh.
+  S.riwayat.unshift(row);
+  renderRiwayat(); renderKp();
   closeM('mRiwayat');
 }
 
 async function dlRiwayat(id) {
   if (!confirm('Hapus riwayat ini?')) return;
-  if (sb) {
-    // riwayat hanya lokal
-    if (error) { alert('Gagal hapus: '+error.message); return; }
-  }
+  // TODO: belum ada endpoint /riwayat di Worker — hapus hanya di memori browser
   S.riwayat = S.riwayat.filter(r=>r.id!==id);
   renderRiwayat();
 }
@@ -5092,28 +5003,22 @@ async function saveKp() {
     hash: await mkH(nip + nama + jabat),
   };
 
-  if (sb) {
-    const dbRow = {
-      nip: row.nip, nama: row.nama, gelar: row.gelar,
-      tgl_lahir: row.tglLahir||null, ttl: row.ttl, jk: row.jk,
-      jabatan: row.jabatan, satker: row.satker, golongan: row.golongan,
-      tmt_golongan: row.tmtGol||null, eselon: row.eselon,
-      tmt_jabatan:  row.tmtJab||null, jenis: row.jenis,
-      pendidikan: row.pendidikan, prodi: row.prodi,
-      hp: row.hp, email: row.email, status: row.status,
-      catatan: row.catatan, file_url: row.fileUrl,
-      hash: row.hash, created_by: S.userId||null
-    };
-    let error;
+  const dbRow = {
+    nip: row.nip, nama: row.nama, gelar: row.gelar,
+    tgl_lahir: row.tglLahir||null, ttl: row.ttl, jk: row.jk,
+    jabatan: row.jabatan, satker: row.satker, golongan: row.golongan,
+    tmt_golongan: row.tmtGol||null, eselon: row.eselon,
+    tmt_jabatan:  row.tmtJab||null, jenis: row.jenis,
+    pendidikan: row.pendidikan, prodi: row.prodi,
+    hp: row.hp, email: row.email, status: row.status,
+    catatan: row.catatan, file_url: row.fileUrl,
+    hash: row.hash, created_by: S.userId||null
+  };
+  try{
     if (id) { await api('PUT',`/pegawai/${id}`,dbRow); }
     else    { await api('POST','/pegawai',dbRow); }
-    if (error) { alert('Gagal simpan: '+error.message); return; }
     await loadPegawai();
-  } else {
-    if (id) { const x=S.pegawai.findIndex(p=>p.id===id); if(x>=0) S.pegawai[x]=row; }
-    else S.pegawai.unshift(row);
-    renderKp(); updD();
-  }
+  }catch(e){ alert('Gagal simpan: '+e.message); return; }
   closeM('mKepeg');
 }
 
@@ -5136,11 +5041,6 @@ async function dlKp(id) {
     await api('DELETE',`/pegawai/${id}`);
     await loadPegawai();
   } catch(e) { alert('Gagal hapus: '+e.message); return; }
-  if (false) {
-    S.pegawai  = S.pegawai.filter(x=>x.id!==id);
-    S.riwayat  = S.riwayat.filter(r=>r.pegawaiId!==id);
-    renderKp(); renderRiwayat(); updD();
-  }
 }
 
 // ─── PREVIEW SK PEGAWAI ─────────────────────────────────────────
@@ -5293,16 +5193,16 @@ function toggleTheme(){
   if(html.classList.contains('light')){
     html.classList.remove('light');
     if(btn) btn.textContent = '🌙';
-    try { localStorage.setItem('amn_theme','dark'); } catch(e){}
+    try { localStorage.setItem('sipadi_theme','dark'); } catch(e){}
   } else {
     html.classList.add('light');
     if(btn) btn.textContent = '☀️';
-    try { localStorage.setItem('amn_theme','light'); } catch(e){}
+    try { localStorage.setItem('sipadi_theme','light'); } catch(e){}
   }
 }
 function initTheme(){
   try {
-    const t = localStorage.getItem('amn_theme');
+    const t = localStorage.getItem('sipadi_theme');
     const btn = document.getElementById('themeBtn');
     // Default light, dark hanya jika user eksplisit pilih dark
     if(t === 'dark'){
@@ -5319,7 +5219,7 @@ function initTheme(){
 // Load saved theme
 (function(){
   try {
-    const t = localStorage.getItem('amn_theme');
+    const t = localStorage.getItem('sipadi_theme');
     // Default: light mode
     if(t === 'dark'){
       document.documentElement.classList.remove('light');
