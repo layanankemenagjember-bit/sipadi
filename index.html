@@ -3414,7 +3414,7 @@ async function saveN(){
       wali,
       status:       'terverifikasi',
       hash,
-      file_url:     fileUrl,
+      file_url:     null,
       created_by:   S.userId||null
     };
 
@@ -3426,8 +3426,8 @@ async function saveN(){
       closeM('mNikah');
       showToast('✅ Register Nikah berhasil disimpan!', 'success');
       if(fileObj && savedId){
-        uploadFile(fileObj,'nikah/'+kua.replace(/\s+/g,'_')).then(async fileUrl=>{
-          if(fileUrl){ await api('PUT',`/nikah/${savedId}`,{file_url:fileUrl}); }
+        uploadFile(fileObj,'nikah/'+kua.replace(/\s+/g,'_')).then(async uploadedUrl=>{
+          if(uploadedUrl){ await api('PUT',`/nikah/${savedId}`,{file_url:uploadedUrl}); await loadNikah(); }
         }).catch(e=>console.warn('Upload error:',e));
       }
     }catch(err){ alert('Gagal simpan: '+err.message); return; }
