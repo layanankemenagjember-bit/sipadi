@@ -3222,7 +3222,8 @@ async function doLogout(){
 async function loadOps(){
   try{
     const data = await api('GET','/operators');
-    S.ops = (data.operators||[]).map(r=>({
+    const rows = Array.isArray(data) ? data : (data.operators||data.data||[]);
+    S.ops = rows.map(r=>({
       id:r.id, nama:r.nama||r.email, email:r.email,
       role:r.role, satker:r.satker||'', hp:r.hp||'', status:r.status||'aktif'
     }));
@@ -3256,7 +3257,8 @@ function showLoadingTables(){
 async function loadNikah(){
   try{
     const data = await api('GET','/nikah');
-    S.nikah = await Promise.all((data.data||[]).map(async r=>({
+    const rows = Array.isArray(data) ? data : (data.data||[]);
+    S.nikah = await Promise.all(rows.map(async r=>({
       id:r.id, noAkta:r.no_akta, noPmrk:r.no_pmrk,
       tgl:r.tgl, suami:r.suami, suamiNik:await decryptNIK(r.suami_nik),
       suamiTtl:r.suami_ttl, suamiPek:r.suami_pek, suamiAlamat:r.suami_alamat||'',
@@ -3272,7 +3274,8 @@ async function loadNikah(){
 async function loadIjazah(){
   try{
     const data = await api('GET','/ijazah');
-    S.ijazah = (data.data||[]).map(r=>({
+    const rows = Array.isArray(data) ? data : (data.data||[]);
+    S.ijazah = rows.map(r=>({
       id:r.id, no:r.no, thn:r.thn,
       nama:r.nama, ttl:r.ttl, madrasah:r.madrasah,
       jenjang:r.jenjang, nisn:r.nisn, jurusan:r.jurusan, nilai:r.nilai,
@@ -3293,11 +3296,21 @@ async function uploadFile(file, folder){
     const ext = file.name.split('.').pop().toLowerCase();
     const key = `${folder}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
     // Dapatkan presigned URL dari Worker
-    const {url} = await api('GET', `/upload-url?key=${encodeURIComponent(key)}&type=${encodeURIComponent(file.type)}`);
+    const presign = await api('GET', `/upload-url?key=${encodeURIComponent(key)}&type=${encodeURIComponent(file.type)}`);
+    const url = presign?.url;
+    if(!url){
+      console.error('uploadFile: endpoint /upload-url tidak mengembalikan field "url". Respons Worker:', presign);
+      showToast?.('⚠️ Upload file gagal: endpoint /upload-url belum siap di Worker. Data tetap tersimpan tanpa file.', 'error');
+      return null;
+    }
     const res = await fetch(url, {method:'PUT', body:file, headers:{'Content-Type':file.type}});
     if(!res.ok) throw new Error('Upload gagal: '+res.status);
     return `${R2_URL}/${key}`;
-  }catch(e){ console.warn('uploadFile error:',e.message); return null; }
+  }catch(e){
+    console.warn('uploadFile error:',e.message);
+    showToast?.('⚠️ Upload file gagal: '+e.message+'. Data tetap tersimpan tanpa file.', 'error');
+    return null;
+  }
 }
 
 // ══════════════════════════════════════════════════════
@@ -5098,7 +5111,8 @@ function pvKp(id) {
 async function loadPegawai() {
   try{
     const data = await api('GET','/pegawai');
-    S.pegawai = (data.data||[]).map(r=>({
+    const rows = Array.isArray(data) ? data : (data.data||[]);
+    S.pegawai = rows.map(r=>({
       id:r.id, nip:r.nip, nama:r.nama, gelar:r.gelar,
       ttl:r.ttl, tglLahir:r.tgl_lahir, jk:r.jk,
       jabatan:r.jabatan, satker:r.satker, golongan:r.golongan,
